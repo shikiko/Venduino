@@ -1,0 +1,22 @@
+{
+  "name": "venduino",
+  "version": "1.0.0",
+  "description": "Project",
+  "main": "WebServer\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[DW\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D/Server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shikiko/Venduino.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shikiko/Venduino/issues"
+  },
+  "homepage": "https://github.com/shikiko/Venduino#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
