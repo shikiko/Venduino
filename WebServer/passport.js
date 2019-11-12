@@ -22,7 +22,7 @@ passport.use(new LocalStrategy({
     .where("username", username)
     .first()
     .then(user => {
-      if (user === null) {
+      if (user === null || user === undefined) {
         return done(null, false, { message: "bad username" });
       } else {
         bcrypt.compare(password, user.password).then(response => {
