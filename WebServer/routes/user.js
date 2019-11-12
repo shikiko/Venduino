@@ -88,7 +88,10 @@ router.post('/register', (req, res) => {
           }
   
           /** generate a signed json web token and return it in the response */
-          const token = jwt.sign(JSON.stringify(payload), CONFIG.JWT_SECRET);
+          const token = jwt.sign(JSON.stringify({
+            ...payload,
+            // neverExpire: true
+          }), CONFIG.JWT_SECRET);
   
           /** assign our jwt to the cookie */
           res.cookie('jwt', jwt, { httpOnly: true, secure: true });
