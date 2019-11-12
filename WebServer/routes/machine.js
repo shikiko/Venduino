@@ -23,4 +23,38 @@ router.get('/',
     });
   });
   
-  module.exports = router;
+ router.get('/getInventory',
+  (req, res) => {
+    //Get items available via machine ID
+	knex.from('INVENTORY').select("*")
+	.innerJoin('ITEMS','INVENTORY.item_id','ITEMS.item_id')
+	.where('INVENTORY.machine_id',req.body.machine_id)
+	.then(data => {
+		res.status(200).json({
+			"message":"success",
+			"data":data
+		});
+    }).catch((err) => {
+        console.log(err);
+        return res.status(400).send({ error: 'Failed to get machine' });
+    });
+  });
+ 
+router.post("/startup",
+	(req, res) => {
+		//Update the new values on every machine new startup
+		knex('MACHINE').select("*")
+		.where('machine_id',req.body.machine_id)
+		.then(data =>{
+			if(data.length == 0){return res.status(404).send("Machine not found.");}
+			knex('MACHINE')
+			.where({machine_id: req.body.machine_id})
+			.update({
+				location: req.body.location,
+				ip: req.body.ip
+			}).catch((err) => { console.log( err); throw err });;
+			res.status(200).send("Machine details updated.");
+		});
+});
+ 
+ module.exports = router;

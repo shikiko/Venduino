@@ -2,6 +2,7 @@ const express = require("express");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
+const request = require('request');
 
 const router = express.Router();
 const knex = require("../db");
@@ -101,4 +102,73 @@ router.post('/register', (req, res) => {
     )(req, res);
   });
   
-  module.exports = router;
+ router.patch('/',(req, res) =>{
+	 knex('USER').select("*")
+	.where('user_id',req.body.user_id)
+	.then(data =>{
+		if(data.length == 0){return res.status(404).send("User not found.");}
+		knex('USER')
+		.where({user_id: req.body.user_id})
+		.update({
+			username: req.body.username,
+			password: bcrypt.hashSync(req.body.password, 10)
+		}).catch((err) => { 
+			console.log( err); 
+			return res.status(400).send("An error has occured. Please try again.");
+		});
+		res.status(200).send("User updated.");
+	});
+ });
+ 
+ router.delete('/',(req, res) =>{
+	 knex('USER').where('user_id', req.body.user_id)
+	 .del().catch((err) => { 
+		console.log( err); 
+		return res.status(400).send("An error has occured. Please try again."); 
+	});
+	res.status(200).send("Account ID: " + req.body.user_id + " has been successfully deleted");
+ });
+  
+router.post('/topup', (req, res) => {
+	var originalValue = 0.0;
+		knex('USER').select("*")
+		.where('user_id',req.body.user_id)
+		.then(data =>{
+			originalValue = data[0]['balance'];
+			newValue = originalValue + parseInt(req.body.value);
+			
+			if(data.length == 0){res.send("User not found.")}
+			knex('USER')
+			.where({user_id: req.body.user_id})
+			.update({
+				balance: newValue
+			}).catch((err) => { 
+				console.log( err); 
+				return res.status(400).send("An error has occured. Please try again.");
+			});
+			res.status(200).send("You have topped up your balance from: " + originalValue + " to: " + newValue);
+	});
+});
+
+router.post('/buy', (req, res) => {
+	knex('MACHINE').select("*").where('machine_id',req.body.machine_id)
+	.then(data =>{
+		console.log(data);
+		console.log(req.user);
+		var options = {
+			url: data[0]['ip'],
+			method: "POST",
+			agent: false,
+			headers: {
+				'Content-type': 'text/plain'
+			},
+			body: 'hello'
+		};
+		request.post(
+			options, function(error, response, body){
+			console.log(body);});
+	});
+	res.status(200).send("Transaction complete! Please wait patiently for your item...");
+});
+  
+ module.exports = router;
