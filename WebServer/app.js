@@ -7,7 +7,7 @@ var CONFIG = require("./config");
 var user = require("./routes/user");
 var machine = require("./routes/machine");
 var item = require("./routes/item.js");
-var sales = require(".routes/sales.js");
+var sales = require("./routes/sales.js");
 var inventory = require("./routes/inventory.js");
 
 require("./passport");

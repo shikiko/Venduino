@@ -151,23 +151,48 @@ router.post('/topup', (req, res) => {
 });
 
 router.post('/buy', (req, res) => {
-	knex('MACHINE').select("*").where('machine_id',req.body.machine_id)
-	.then(data =>{
-		console.log(data);
-		console.log(req.user);
-		var options = {
-			url: data[0]['ip'],
-			method: "POST",
-			agent: false,
-			headers: {
-				'Content-type': 'text/plain'
-			},
-			body: 'hello'
-		};
-		request.post(
-			options, function(error, response, body){
-			console.log(body);});
+	console.log("I have been called");
+	
+	//Experimental test//
+	var dgram = require('dgram');
+	const socket = dgram.createSocket('udp4');
+	var client = dgram.createSocket('udp4');
+	
+	//Listening server//
+	socket.on('listening', () => {
+		let addr = socket.address();
+		console.log('Listening for UDP packets at ${addr.address}:${addr.port}');
 	});
+	socket.bind(8082);
+	
+	//Print to console on receiving any udp message to simulate ardunio board//
+	socket.on('message', (msg, rinfo) => {
+		console.log('Recieved UDP message: ' + msg);
+	});
+	
+	//send a test udp packet to "machine id". If received, successful.
+	//Change port '8082' to ardunio testing port and '127.0.0.1' to ardunio ip address for testing
+	client.send('2',0, 1, 8082, '127.0.0.1', function(err, bytes) {
+		client.close();
+	});
+	
+	// knex('MACHINE').select("*").where('machine_id',req.body.machine_id)
+	// .then(data =>{
+		// console.log(data);
+		// console.log(req.user);
+		// var options = {
+			// url: data[0]['ip'],
+			// method: "POST",
+			// agent: false,
+			// headers: {
+				// 'Content-type': 'text/plain'
+			// },
+			// body: 'hello'
+		// };
+		// request.post(
+			// options, function(error, response, body){
+			// console.log(body);});
+		// });
 	res.status(200).send("Transaction complete! Please wait patiently for your item...");
 });
   
