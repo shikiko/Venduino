@@ -150,50 +150,77 @@ router.post('/topup', (req, res) => {
 	});
 });
 
-router.post('/buy', (req, res) => {
-	console.log("I have been called");
+router.post('/buy', passport.authenticate('jwt', {session: false}), (req, res) => {
+	if(!req.body.machine_id || !req.body.item_id || !req.body.quantity){ return res.status(200).send("Incorrect parameters received.");}
+	var user_model = {};
+	var machine_model = {};
+	var item_model = {};
+	var inventory_model = {};
 	
 	//Experimental test//
 	var dgram = require('dgram');
-	const socket = dgram.createSocket('udp4');
-	var client = dgram.createSocket('udp4');
+	//const socket = dgram.createSocket('udp4');
 	
 	//Listening server//
-	socket.on('listening', () => {
-		let addr = socket.address();
-		console.log('Listening for UDP packets at ${addr.address}:${addr.port}');
-	});
-	socket.bind(8082);
+	// socket.on('listening', () => {
+		// let addr = socket.address();
+		// console.log('Listening for UDP packets at 8082');
+	// });
+	// socket.bind(8082);
 	
-	//Print to console on receiving any udp message to simulate ardunio board//
-	socket.on('message', (msg, rinfo) => {
-		console.log('Recieved UDP message: ' + msg);
+	// socket.on('message', (msg, rinfo) => {
+		// console.log('Recieved UDP message: ' + msg);
+		// socket.close();
+	// });
+	
+	//Retrieve data from USER, MACHINE and ITEM
+	knex('USER').select("*").where('username', req.user['username'])
+	.then(data =>{
+		user_model = data[0];
+		if(user_model['price'] == 0){return res.status(200).send("Insufficient balance");}
+		knex('MACHINE').select("*").where('machine_id',req.body.machine_id)
+		.then(data =>{
+			machine_model = data[0];
+			knex('ITEMS').select("*").where('item_id', req.body.item_id)
+			.then(data =>{
+				item_model = data[0];
+				knex('INVENTORY').select("*").where({
+					item_id: req.body.machine_id, 
+					machine_id: req.body.item_id
+				}).then(data =>{
+					if(data.length == 0){ return res.status(200).send("Out of stock");}
+					inventory_model = data[0];
+					if(user_model['balance'] < (item_model['price']*req.body.quantity))
+					{
+						console.log("User does not have enough money");
+						res.status(200).send("Insufficient balance");
+						return;
+					}
+					user_model['balance'] -= item_model['price'];
+					inventory_model['quantity'] -= req.body.quantity;
+					console.log("User balance: " + user_model['balance'] + " " + "inventory quantity: " + inventory_model['quantity']);
+					knex('USER').where('user_id', user_model['user_id'])
+					.update({
+						balance: user_model['balance']
+					}).catch((err) => { console.log( err); throw err });
+					knex('INVENTORY').where({
+						item_id: inventory_model['item_id'], 
+						machine_id: inventory_model['machine_id']
+					})
+					.update({
+						quantity: inventory_model['quantity']
+					}).catch((err) => { console.log( err); throw err });
+				});
+			});
+			var client = dgram.createSocket('udp4');
+			client.send(req.body.item_id,0, 20, 8082, machine_model['ip'], function(err, bytes) {
+				console.log("Sent item id to machine ip: " + machine_model['ip']);
+				client.close();
+			});
+		});
 	});
 	
-	//send a test udp packet to "machine id". If received, successful.
-	//Change port '8082' to ardunio testing port and '127.0.0.1' to ardunio ip address for testing
-	client.send('2',0, 1, 8082, '127.0.0.1', function(err, bytes) {
-		client.close();
-	});
-	
-	// knex('MACHINE').select("*").where('machine_id',req.body.machine_id)
-	// .then(data =>{
-		// console.log(data);
-		// console.log(req.user);
-		// var options = {
-			// url: data[0]['ip'],
-			// method: "POST",
-			// agent: false,
-			// headers: {
-				// 'Content-type': 'text/plain'
-			// },
-			// body: 'hello'
-		// };
-		// request.post(
-			// options, function(error, response, body){
-			// console.log(body);});
-		// });
-	res.status(200).send("Transaction complete! Please wait patiently for your item...");
+	res.status(200).send("Transaction successful.");
 });
   
  module.exports = router;

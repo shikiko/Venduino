@@ -50,7 +50,8 @@ router.post("/startup",
 			knex('MACHINE')
 			.where({machine_id: req.body.machine_id})
 			.update({
-				location: req.body.location,
+				latitude: req.body.latitude,
+				longtitude: req.body.longtitude,
 				ip: req.body.ip
 			}).catch((err) => { console.log( err); throw err });;
 			res.status(200).send("Machine details updated.");
