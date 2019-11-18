@@ -28,8 +28,8 @@ router.post('/register', (req, res) => {
         error: 'Invalid body',
         });
     }
-    knex("USER")
-    .where("username", req.body.username)
+  knex("USER")
+    .whereRaw("LOWER(username) LIKE '%' || LOWER(?) || '%' ", req.body.username)
     .first()
     .then(user => {
       if (user != null) {
@@ -65,7 +65,7 @@ router.post('/register', (req, res) => {
       }
     });
   });
-  
+
   router.post('/login', (req, res) => {
     passport.authenticate(
       'local',
@@ -75,25 +75,25 @@ router.post('/register', (req, res) => {
             return res.status(400).json({ error });
         }
         console.log(user)
-  
+
         /** This is what ends up in our JWT */
         const payload = {
           username: user.username,
           expires: Date.now() + parseInt(CONFIG.JWT_EXPIRATION_MS),
         };
-  
+
         /** assigns payload to req.user */
         req.login(payload, {session: false}, (error) => {
           if (error) {
             return res.status(400).send({ error });
           }
-  
+
           /** generate a signed json web token and return it in the response */
           const token = jwt.sign(JSON.stringify({
             ...payload,
             // neverExpire: true
           }), CONFIG.JWT_SECRET);
-  
+
           /** assign our jwt to the cookie */
           res.cookie('jwt', jwt, { httpOnly: true, secure: true });
           return res.status(200).send({ username: user.username, token });
@@ -101,7 +101,7 @@ router.post('/register', (req, res) => {
       },
     )(req, res);
   });
-  
+
  router.patch('/',(req, res) =>{
 	 knex('USER').select("*")
 	.where('user_id',req.body.user_id)
@@ -112,23 +112,23 @@ router.post('/register', (req, res) => {
 		.update({
 			username: req.body.username,
 			password: bcrypt.hashSync(req.body.password, 10)
-		}).catch((err) => { 
-			console.log( err); 
+		}).catch((err) => {
+			console.log( err);
 			return res.status(400).send("An error has occured. Please try again.");
 		});
 		res.status(200).send("User updated.");
 	});
  });
- 
+
  router.delete('/',(req, res) =>{
 	 knex('USER').where('user_id', req.body.user_id)
-	 .del().catch((err) => { 
-		console.log( err); 
-		return res.status(400).send("An error has occured. Please try again."); 
+	 .del().catch((err) => {
+		console.log( err);
+		return res.status(400).send("An error has occured. Please try again.");
 	});
 	res.status(200).send("Account ID: " + req.body.user_id + " has been successfully deleted");
  });
-  
+
 router.post('/topup', (req, res) => {
 	var originalValue = 0.0;
 		knex('USER').select("*")
@@ -136,14 +136,14 @@ router.post('/topup', (req, res) => {
 		.then(data =>{
 			originalValue = data[0]['balance'];
 			newValue = originalValue + parseInt(req.body.value);
-			
+
 			if(data.length == 0){res.send("User not found.")}
 			knex('USER')
 			.where({user_id: req.body.user_id})
 			.update({
 				balance: newValue
-			}).catch((err) => { 
-				console.log( err); 
+			}).catch((err) => {
+				console.log( err);
 				return res.status(400).send("An error has occured. Please try again.");
 			});
 			res.status(200).send("You have topped up your balance from: " + originalValue + " to: " + newValue);
@@ -156,25 +156,26 @@ router.post('/buy', passport.authenticate('jwt', {session: false}), (req, res) =
 	var machine_model = {};
 	var item_model = {};
 	var inventory_model = {};
-	
+
 	//Experimental test//
 	var dgram = require('dgram');
 	//const socket = dgram.createSocket('udp4');
-	
+
 	//Listening server//
 	// socket.on('listening', () => {
 		// let addr = socket.address();
 		// console.log('Listening for UDP packets at 8082');
 	// });
 	// socket.bind(8082);
-	
+
 	// socket.on('message', (msg, rinfo) => {
 		// console.log('Recieved UDP message: ' + msg);
 		// socket.close();
 	// });
-	
+
 	//Retrieve data from USER, MACHINE and ITEM
-	knex('USER').select("*").where('username', req.user['username'])
+  knex('USER').select("*")
+    .whereRaw("LOWER(username) LIKE '%' || LOWER(?) || '%' ", req.user['username'])
 	.then(data =>{
 		user_model = data[0];
 		if(user_model['price'] == 0){return res.status(200).send("Insufficient balance");}
@@ -185,7 +186,7 @@ router.post('/buy', passport.authenticate('jwt', {session: false}), (req, res) =
 			.then(data =>{
 				item_model = data[0];
 				knex('INVENTORY').select("*").where({
-					item_id: req.body.machine_id, 
+					item_id: req.body.machine_id,
 					machine_id: req.body.item_id
 				}).then(data =>{
 					if(data.length == 0){ return res.status(200).send("Out of stock");}
@@ -204,7 +205,7 @@ router.post('/buy', passport.authenticate('jwt', {session: false}), (req, res) =
 						balance: user_model['balance']
 					}).catch((err) => { console.log( err); throw err });
 					knex('INVENTORY').where({
-						item_id: inventory_model['item_id'], 
+						item_id: inventory_model['item_id'],
 						machine_id: inventory_model['machine_id']
 					})
 					.update({
@@ -219,8 +220,8 @@ router.post('/buy', passport.authenticate('jwt', {session: false}), (req, res) =
 			});
 		});
 	});
-	
+
 	res.status(200).send("Transaction successful.");
 });
-  
+
  module.exports = router;
