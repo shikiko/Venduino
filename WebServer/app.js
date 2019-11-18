@@ -47,9 +47,10 @@ app.use(function(err, req, res, next) {
 });
 
 // Start server
-app.listen(CONFIG.HTTP_PORT, () => {
+const PORT = process.env.PORT || CONFIG.HTTP_PORT || 8080
+app.listen(PORT, () => {
   console.log(
-    "Server running on port %PORT%".replace("%PORT%", CONFIG.HTTP_PORT)
+    "Server running on port %PORT%".replace("%PORT%", PORT)
   );
 });
 
