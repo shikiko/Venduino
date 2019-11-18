@@ -20,10 +20,18 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 app.use("/api/user", user);
-app.use("/api/machine", passport.authenticate('jwt', {session: false}), machine);
-app.use("/api/item", passport.authenticate('jwt', {session: false}), item);
-app.use("/api/inventory", passport.authenticate('jwt', {session: false}), inventory);
-app.use("/api/sales", passport.authenticate('jwt', {session: false}), sales);
+app.use(
+  "/api/machine",
+  passport.authenticate("jwt", { session: false }),
+  machine
+);
+app.use("/api/item", passport.authenticate("jwt", { session: false }), item);
+app.use(
+  "/api/inventory",
+  passport.authenticate("jwt", { session: false }),
+  inventory
+);
+app.use("/api/sales", passport.authenticate("jwt", { session: false }), sales);
 
 // Default response for any other request
 app.use(function(req, res) {
