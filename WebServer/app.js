@@ -19,6 +19,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
+const logger = function (req, res, next) {
+  console.log((new Date()).toISOString(), req.method, req.originalUrl, req.params)
+  next()
+}
+
+app.use(logger)
+
 app.use("/api/user", user);
 app.use(
   "/api/machine",
