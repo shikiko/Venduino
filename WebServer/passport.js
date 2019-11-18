@@ -19,7 +19,7 @@ passport.use(new LocalStrategy({
   }, async (username, password, done) => {
     knex
     .from("USER")
-    .where("username", username)
+    .whereRaw("LOWER(username) LIKE '%' || LOWER(?) || '%' ", username)
     .first()
     .then(user => {
       if (user === null || user === undefined) {
@@ -38,8 +38,8 @@ passport.use(new LocalStrategy({
       }
     });
   }));
-  
-  
+
+
   passport.use(new JWTStrategy(opts,
     (jwtPayload, done) => {
       console.log(jwtPayload)
@@ -48,7 +48,7 @@ passport.use(new LocalStrategy({
             message: "jwt expired"
           });
       }
-  
+
       return done(null, jwtPayload);
     }
   ));
