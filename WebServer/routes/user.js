@@ -77,7 +77,7 @@ router.post("/login", (req, res) => {
     if (error || !user) {
       return res.status(400).json({ error });
     }
-    console.log(user);
+    console.log('/login', user);
 
     /** This is what ends up in our JWT */
     const payload = {
@@ -243,7 +243,7 @@ router.post(
                       user_model["balance"] <
                       item_model["price"] * req.body.quantity
                     ) {
-                      console.log("User does not have enough money");
+                      console.log("/buy: User does not have enough money");
                       res.status(200).send("Insufficient balance");
                       return;
                     }
@@ -288,7 +288,7 @@ router.post(
               machine_model["ip"],
               function(err, bytes) {
                 console.log(
-                  "Sent item id to machine ip: " + machine_model["ip"]
+                  "/buy: Sent item id to machine ip: " + machine_model["ip"]
                 );
                 client.close();
               }

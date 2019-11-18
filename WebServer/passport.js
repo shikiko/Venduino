@@ -46,7 +46,7 @@ passport.use(
 
 passport.use(
   new JWTStrategy(opts, (jwtPayload, done) => {
-    console.log(jwtPayload);
+    // console.log(jwtPayload);
     if (!jwtPayload.neverExpire && Date.now() > jwtPayload.expires) {
       return done(null, false, {
         message: "jwt expired"
