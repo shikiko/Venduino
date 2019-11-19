@@ -39,12 +39,13 @@ void setup() {
   SerialMonitorInterface.begin(9600);
   Wire.begin();
   display.begin();
+  display.setFlip(true);
   // Set screen brightness to max (15)
   display.setBrightness(15);
   // Draws a white rectangle to be used as background
-  display.drawRect(x_offset-3,0,58+6,64,TSRectangleFilled,TS_16b_White);
+  display.drawRect(x_offset - 3, 0, 58 + 6, 64, TSRectangleFilled, TS_16b_White);
   display.setFont(liberationSans_14ptFontInfo);
-  display.setCursor(18,23);
+  display.setCursor(18, 23);
   display.fontColor(RED, WHITE);
   display.print("Set QR");
   while (!SerialMonitorInterface); //This line will block until a serial monitor is opened with TinyScreen+!
@@ -54,13 +55,12 @@ void setup() {
 void loop() {
   aci_loop();//Process any ACI commands or events from the NRF8001- main BLE handler, must run often. Keep main loop short.
   if (ble_rx_buffer_len) {//Check if data is available
-    SerialMonitorInterface.print(ble_rx_buffer_len);
-    SerialMonitorInterface.print(" : ");
-    SerialMonitorInterface.println((char*)ble_rx_buffer);
-    if(strstr((char*)ble_rx_buffer, cmd) != NULL){
+    if (strstr((char*)ble_rx_buffer, cmd) != NULL) {
       code = (char*)ble_rx_buffer + 5;
       SerialMonitorInterface.println(code);
+      lib_aci_send_data(0,"Setting QR Code",15);
       genQRCode();
+      lib_aci_send_data(0,"Done",4);
     }
     ble_rx_buffer_len = 0;//clear afer reading
   }
@@ -89,7 +89,7 @@ void loop() {
   }
 }
 
-void genQRCode(){
+void genQRCode() {
   // Initializing QR Code
   QRCode qrcode;
   uint8_t qrcodeBytes[qrcode_getBufferSize(3)];
@@ -98,18 +98,19 @@ void genQRCode(){
   qrcode_initText(&qrcode, qrcodeBytes, 3, ECC_LOW, code);
   // Start of display
   display.startData();
+  lib_aci_send_data(0,"Displaying QR Code",18);
   for (uint8_t y = 0; y < qrcode.size; y++) {
-      for (uint8_t x = 0; x < qrcode.size; x++) {
-          // Getting color of QR Code at Location X Y
-          color = qrcode_getModule(&qrcode, x ,y) ? TS_16b_Black : TS_16b_White;
-          if (color != TS_16b_White) {
-            // Scales 1 pixel to 4
-            display.drawPixel(x_offset + x * 2, y_offset + y * 2, color);
-            display.drawPixel(x_offset + x * 2+1, y_offset + y * 2, color);
-            display.drawPixel(x_offset + x * 2, y_offset + y * 2+1, color);
-            display.drawPixel(x_offset + x * 2+1, y_offset + y * 2+1, color);
-          }
-        }
+    for (uint8_t x = 0; x < qrcode.size; x++) {
+      // Getting color of QR Code at Location X Y
+      color = qrcode_getModule(&qrcode, x , y) ? TS_16b_Black : TS_16b_White;
+      if (color != TS_16b_White) {
+        // Scales 1 pixel to 4
+        display.drawPixel(x_offset + x * 2, y_offset + y * 2, color);
+        display.drawPixel(x_offset + x * 2 + 1, y_offset + y * 2, color);
+        display.drawPixel(x_offset + x * 2, y_offset + y * 2 + 1, color);
+        display.drawPixel(x_offset + x * 2 + 1, y_offset + y * 2 + 1, color);
+      }
+    }
   }
   // End of Display
   display.endTransfer();
