@@ -81,46 +81,47 @@ router.post(
 
     //Retrieve data from USER, MACHINE and ITEM
     knex("USER")
-      .select("*")
       .whereRaw(
         "LOWER(username) LIKE '%' || LOWER(?) || '%' ",
-        req.user["username"]
-      )
-      .then(data => {
-        const user_model = data[0];
-        if (user_model["price"] == 0) {
+        req.user.username
+    )
+      .first()
+      .then(user => {
+        if (!user) {
+          return res.status(400).send({ error: "Invalid JWT" });
+        }
+        delete user.password;
+        if (user.price == 0) {
           return res.status(400).send({ error: "Insufficient balance"});
         }
         knex("MACHINE")
-          .select("*")
           .where("machine_id", req.params.machineId)
-          .then(data => {
-            const machine_model = data[0];
-            if (!machine_model) {
+          .first()
+          .then(machine => {
+            if (!machine) {
               return res.status(400).send({ error: "Invalid machine_id" });
             }
             knex("ITEMS")
               .select("*")
               .where("item_id", req.body.item_id)
               .then(data => {
-                const item_model = data[0];
-                if (!item_model) {
+                const item = data[0];
+                if (!item) {
                   return res.status(400).send({ error: "Invalid item_id" });
                 }
                 knex("INVENTORY")
-                  .select("*")
                   .where({
                     item_id: req.body.item_id,
                     machine_id: req.params.machineId
                   })
-                  .then(data => {
-                    if (data.length == 0) {
+                  .first()
+                  .then(inventory => {
+                    if (!inventory) {
                       return res.status(400).send({ error: "Out of stock" });
                     }
-                    const inventory_model = data[0];
                     if (
-                      user_model["balance"] <
-                      item_model["price"] * quantity
+                      user.balance <
+                      item.price * quantity
                     ) {
                       console.log("/buy: User does not have enough money");
                       return res.status(400).send({ error: "Insufficient balance" });
@@ -128,52 +129,57 @@ router.post(
 
 
                     if (
-                      inventory_model["quantity"] - quantity < 0
+                      inventory.quantity - quantity < 0
                     ) {
                       console.log("/buy: Not enough inventory");
                       return res.status(400).send({ error: "Not enough items" });
                     }
 
 
-                    user_model["balance"] -= item_model["price"];
-                    inventory_model["quantity"] -= quantity;
+                    user.balance -= item.price;
+                    inventory.quantity -= quantity;
                     console.log(
                       "User balance: " +
-                        user_model["balance"] +
-                        " " +
-                        "inventory quantity: " +
-                        inventory_model["quantity"]
+                        user.balance +
+                        ", " +
+                        "Inventory quantity: " +
+                        inventory.quantity
                     );
-                    knex("USER")
-                      .where("user_id", user_model["user_id"])
+                    Promise.all([
+                      knex("USER")
+                      .where("user_id", user.user_id)
                       .update({
-                        balance: user_model["balance"]
-                      })
-                    knex("INVENTORY")
+                        balance: user.balance
+                      }),
+                      knex("INVENTORY")
                       .where({
-                        item_id: inventory_model["item_id"],
-                        machine_id: inventory_model["machine_id"]
+                        item_id: inventory.item_id,
+                        machine_id: inventory.machine_id
                       })
                       .update({
-                        quantity: inventory_model["quantity"]
+                        quantity: inventory.quantity
                       })
-
-
-                    var client = dgram.createSocket("udp4");
-                    client.send(
-                      req.body.item_id,
-                      0,
-                      20,
-                      8082,
-                      machine_model["ip"],
-                      function(err, bytes) {
-                        console.log(
-                          "/buy: Sent item id to machine ip: " + machine_model["ip"]
-                        );
-                        client.close();
-                      }
-                    );
-                    res.status(200).send({ message: "Transaction successful."});
+                    ]).then(response => {
+                      var client = dgram.createSocket("udp4");
+                      const machineData = req.body.item_id;
+                      client.send(
+                        machineData,
+                        0,
+                        20,
+                        8082,
+                        machine["ip"],
+                        function(err, bytes) {
+                          console.log(
+                            "/buy: Sent to machine ip: " + machine["ip"], { machineData}
+                          );
+                          client.close();
+                        }
+                      );
+                      res.status(200).send({
+                        user: user,
+                        message: "Transaction successful."
+                      });
+                    });
                   });
               });
           });
