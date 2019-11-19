@@ -42,7 +42,7 @@ app.use("/api/sales", passport.authenticate("jwt", { session: false }), sales);
 
 // Default response for any other request
 app.use(function(req, res) {
-  res.status(404).send("API Not found");
+  res.status(404).send({ error: "API Not found"});
 });
 
 // error handler
@@ -59,6 +59,16 @@ app.listen(PORT, () => {
   console.log(
     "Server running on port %PORT%".replace("%PORT%", PORT)
   );
+  const ifaces = require('os').networkInterfaces();
+  Object.keys(ifaces).forEach(dev => {
+    ifaces[dev].filter(details => {
+      if (details.family === 'IPv4' && details.internal === false) {
+        // address = details.address;
+        console.log(`Local IP: http://${details.address}:${PORT}`)
+      }
+    });
+  });
+
 });
 
 module.exports = app;

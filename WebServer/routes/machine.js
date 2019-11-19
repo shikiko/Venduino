@@ -50,7 +50,7 @@ router.post("/startup", (req, res) => {
     .where("machine_id", req.body.machine_id)
     .then(data => {
       if (data.length == 0) {
-        return res.status(404).send("Machine not found.");
+        return res.status(404).send({ error: "Machine not found."});
       }
       knex("MACHINE")
         .where({ machine_id: req.body.machine_id })
@@ -63,7 +63,7 @@ router.post("/startup", (req, res) => {
           console.log(err);
           throw err;
         });
-      res.status(200).send("Machine details updated.");
+      res.status(200).send({ message: "Machine details updated."});
     });
 });
 

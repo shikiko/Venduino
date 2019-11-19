@@ -113,7 +113,7 @@ router.patch("/", (req, res) => {
     .where("user_id", req.body.user_id)
     .then(data => {
       if (data.length == 0) {
-        return res.status(404).send("User not found.");
+        return res.status(404).send({ error: "User not found."});
       }
       knex("USER")
         .where({ user_id: req.body.user_id })
@@ -121,13 +121,13 @@ router.patch("/", (req, res) => {
           username: req.body.username,
           password: bcrypt.hashSync(req.body.password, 10)
         })
-        .catch(err => {
-          console.log(err);
+        .catch(error => {
+          console.log(error);
           return res
             .status(400)
-            .send("An error has occured. Please try again.");
+            .send({ error});
         });
-      res.status(200).send("User updated.");
+      res.status(200).send({ message: "User updated."});
     });
 });
 
@@ -135,13 +135,13 @@ router.delete("/", (req, res) => {
   knex("USER")
     .where("user_id", req.body.user_id)
     .del()
-    .catch(err => {
-      console.log(err);
-      return res.status(400).send("An error has occured. Please try again.");
+    .catch(error => {
+      console.log(error);
+      return res.status(400).send(error);
     });
   res
     .status(200)
-    .send("Account ID: " + req.body.user_id + " has been successfully deleted");
+    .send({ message: "Account ID: " + req.body.user_id + " has been successfully deleted"});
 });
 
 router.post("/topup", (req, res) => {
@@ -154,27 +154,27 @@ router.post("/topup", (req, res) => {
       newValue = originalValue + parseInt(req.body.value);
 
       if (data.length == 0) {
-        res.send("User not found.");
+        res.status(400).send({ error: "User not found."});
       }
       knex("USER")
         .where({ user_id: req.body.user_id })
         .update({
           balance: newValue
         })
-        .catch(err => {
-          console.log(err);
+        .catch(error => {
+          console.log(error);
           return res
             .status(400)
-            .send("An error has occured. Please try again.");
+            .send({error});
         });
       res
         .status(200)
-        .send(
+        .send({ message:
           "You have topped up your balance from: " +
             originalValue +
             " to: " +
             newValue
-        );
+        });
     });
 });
 
@@ -183,7 +183,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     if (!req.body.machine_id || !req.body.item_id || !req.body.quantity) {
-      return res.status(200).send("Incorrect parameters received.");
+      return res.status(400).send({ error: "Incorrect parameters received."});
     }
     var user_model = {};
     var machine_model = {};
@@ -216,7 +216,7 @@ router.post(
       .then(data => {
         user_model = data[0];
         if (user_model["price"] == 0) {
-          return res.status(200).send("Insufficient balance");
+          return res.status(400).send({ error: "Insufficient balance"});
         }
         knex("MACHINE")
           .select("*")
@@ -236,7 +236,7 @@ router.post(
                   })
                   .then(data => {
                     if (data.length == 0) {
-                      return res.status(200).send("Out of stock");
+                      return res.status(400).send({ error: "Out of stock" });
                     }
                     inventory_model = data[0];
                     if (
@@ -244,7 +244,7 @@ router.post(
                       item_model["price"] * req.body.quantity
                     ) {
                       console.log("/buy: User does not have enough money");
-                      res.status(200).send("Insufficient balance");
+                      res.status(400).send({ error: "Insufficient balance"});
                       return;
                     }
                     user_model["balance"] -= item_model["price"];
@@ -296,7 +296,7 @@ router.post(
           });
       });
 
-    res.status(200).send("Transaction successful.");
+    res.status(200).send({ message: "Transaction successful."});
   }
 );
 
