@@ -308,7 +308,7 @@ router.post(
 
 
 router.get(
-  "/history",
+  "/purchases",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     const start = req.query.start || 0;
@@ -327,10 +327,7 @@ router.get(
           .orderBy('timestamp', 'desc') // recent first
           .then(data => {
             //Return retrieved data as JSON format
-            return res.status(200).json({
-              message: "success",
-              data: data
-            });
+            return res.status(200).json({ purchases: data });
           })
           .catch(error => {
             console.log(error);
