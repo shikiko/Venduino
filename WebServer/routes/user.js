@@ -321,7 +321,7 @@ router.get(
         knex("SALES")
           .offset(start)
           .limit(limit)
-          .select(["sale_id", "SALES.price", "SALES.item_id", "ITEMS.item_name", "quantity", "SALES.machine_id", "latitude", "longitude", "SALES.timestamp"])
+          .select(["sale_id", "SALES.price", "SALES.item_id", "ITEMS.item_name", "quantity", "SALES.machine_id", "latitude", "longitude", "address", "SALES.timestamp"])
           .leftJoin('machine', 'SALES.machine_id', 'machine.machine_id')
           .leftJoin('ITEMS', 'SALES.item_id', 'ITEMS.item_id')
           .orderBy('timestamp', 'desc') // recent first
