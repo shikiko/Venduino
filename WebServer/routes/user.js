@@ -321,8 +321,9 @@ router.get(
         knex("SALES")
           .offset(start)
           .limit(limit)
-          .select("*")
+          .select(["sale_id", "SALES.price", "SALES.item_id", "ITEMS.item_name", "quantity", "SALES.machine_id", "latitude", "longitude", "SALES.timestamp"])
           .leftJoin('machine', 'SALES.machine_id', 'machine.machine_id')
+          .leftJoin('ITEMS', 'SALES.item_id', 'ITEMS.item_id')
           .orderBy('timestamp', 'desc') // recent first
           .then(data => {
             //Return retrieved data as JSON format
@@ -331,9 +332,9 @@ router.get(
               data: data
             });
           })
-          .catch(err => {
-            console.log(err);
-            return res.status(400).send({ error: "Failed to get sales" });
+          .catch(error => {
+            console.log(error);
+            return res.status(400).send({ error: error.message });
           });
       });
   }
