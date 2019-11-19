@@ -144,39 +144,45 @@ router.delete("/", (req, res) => {
     .send({ message: "Account ID: " + req.body.user_id + " has been successfully deleted"});
 });
 
-router.post("/topup", (req, res) => {
-  var originalValue = 0.0;
-  knex("USER")
-    .select("*")
-    .where("user_id", req.body.user_id)
-    .then(data => {
-      originalValue = data[0]["balance"];
-      newValue = originalValue + parseInt(req.body.value);
 
-      if (data.length == 0) {
-        res.status(400).send({ error: "User not found."});
-      }
-      knex("USER")
-        .where({ user_id: req.body.user_id })
-        .update({
-          balance: newValue
-        })
-        .catch(error => {
-          console.log(error);
-          return res
-            .status(400)
-            .send({error});
-        });
-      res
-        .status(200)
-        .send({ message:
-          "You have topped up your balance from: " +
-            originalValue +
-            " to: " +
-            newValue
-        });
-    });
-});
+router.post(
+  "/topup",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (!req.body.value) {
+      return res.status(400).send({ error: "Invalid parameters" });
+    }
+    knex("USER")
+      .where("username", req.user.username)
+      .first()
+      .then(user => {
+        if (!user) {
+          return res.status(400).send({ error: "Invalid JWT" });
+        }
+        delete user.password;
+
+        const newBalance = user.balance + parseFloat(req.body.value);
+        knex("USER")
+          .where({ user_id: user.user_id })
+          .update({
+            balance: newBalance
+          })
+          .then(updated => {
+            return res.status(200).send({
+              user: {
+                ...user,
+                balance: newBalance
+            } });
+          })
+          .catch(error => {
+            console.log(error);
+            return res
+              .status(400)
+              .send({ error: "gg", error });
+          });
+      })
+  }
+);
 
 router.post(
   "/buy",
