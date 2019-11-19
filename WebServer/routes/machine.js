@@ -119,9 +119,9 @@ router.post(
                     if (!inventory) {
                       return res.status(400).send({ error: "Out of stock" });
                     }
+                    const price = item.price * quantity;
                     if (
-                      user.balance <
-                      item.price * quantity
+                      user.balance < price
                     ) {
                       console.log("/buy: User does not have enough money");
                       return res.status(400).send({ error: "Insufficient balance" });
@@ -136,7 +136,7 @@ router.post(
                     }
 
 
-                    user.balance -= item.price;
+                    user.balance -= price;
                     inventory.quantity -= quantity;
                     console.log(
                       "User balance: " +
@@ -158,7 +158,15 @@ router.post(
                       })
                       .update({
                         quantity: inventory.quantity
-                      })
+                      }),
+                      knex("SALES")
+                        .insert([{
+                          user_id: user.user_id,
+                          machine_id: inventory.machine_id,
+                          item_id: inventory.item_id,
+                          quantity: quantity,
+                          price: price,
+                        }])
                     ]).then(response => {
                       var client = dgram.createSocket("udp4");
                       const machineData = req.body.item_id;

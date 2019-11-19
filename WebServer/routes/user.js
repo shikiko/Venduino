@@ -306,4 +306,37 @@ router.post(
   }
 );
 
+
+router.get(
+  "/history",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const start = req.query.start || 0;
+    const limit = req.query.limit || 1000;
+    knex("USER")
+      .where("username", req.user.username)
+      .first()
+      .then(user => {
+        delete user.password;
+        knex("SALES")
+          .offset(start)
+          .limit(limit)
+          .select("*")
+          .leftJoin('machine', 'SALES.machine_id', 'machine.machine_id')
+          .orderBy('timestamp', 'desc') // recent first
+          .then(data => {
+            //Return retrieved data as JSON format
+            return res.status(200).json({
+              message: "success",
+              data: data
+            });
+          })
+          .catch(err => {
+            console.log(err);
+            return res.status(400).send({ error: "Failed to get sales" });
+          });
+      });
+  }
+);
+
 module.exports = router;
