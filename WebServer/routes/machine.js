@@ -27,20 +27,31 @@ router.get("/", (req, res) => {
 router.get("/:machineId/inventory", (req, res) => {
   //Get items available via machine ID
   knex
-    .from("INVENTORY")
-    .select("*")
-    .innerJoin("ITEMS", "INVENTORY.item_id", "ITEMS.item_id")
-    .where("INVENTORY.machine_id", req.params.machineId)
-    .then(data => {
-      res.status(200).json({
-        message: "success",
-        data: data
+    .from("machine")
+    .first()
+    .where("machine_id", req.params.machineId)
+    .then(machine => {
+      knex
+      .from("INVENTORY")
+      .select("*")
+      .innerJoin("ITEMS", "INVENTORY.item_id", "ITEMS.item_id")
+      .where("INVENTORY.machine_id", req.params.machineId)
+      .then(data => {
+        res.status(200).json({
+          message: "success",
+          machine: machine,
+          data: data
+        });
+      })
+      .catch(err => {
+        console.log(err);
+        return res.status(400).send({ error: "Failed to get inventory" });
       });
     })
-    .catch(err => {
-      console.log(err);
-      return res.status(400).send({ error: "Failed to get machine" });
-    });
+  .catch(err => {
+    console.log(err);
+    return res.status(400).send({ error: "Failed to get machine" });
+  });
 });
 
 router.post("/startup", (req, res) => {
