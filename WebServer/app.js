@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 const logger = function (req, res, next) {
-  console.log((new Date()).toISOString(), req.method, req.originalUrl, req.params)
+  console.log((new Date()).toISOString(), req.method, req.originalUrl, req.params, req.body)
   next()
 }
 
