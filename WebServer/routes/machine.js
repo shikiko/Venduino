@@ -177,6 +177,7 @@ router.post(
                           item_id: inventory.item_id,
                           quantity: quantity,
                           price: price,
+                          type: "buy"
                         }])
                     ]).then(response => {
                       var client = dgram.createSocket("udp4");
