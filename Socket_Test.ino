@@ -51,7 +51,7 @@ void setup() {
   StaticJsonBuffer<300> JSONbuffer;   //Declaring static JSON buffer
   JsonObject& JSONencoder = JSONbuffer.createObject();
 
-  JSONencoder["machine_id"] = "1"; //Machine ID
+  JSONencoder["machine_id"] = "ICT1003"; //Machine ID
   JSONencoder["location"] = "SIT"; //Location of Machine
   JSONencoder["ip"] = ip; //IP of Machine
 
@@ -81,13 +81,13 @@ void setup() {
 void power_motor(String selection) {
     if(selection == "1"){
         digitalWrite(d1, HIGH);
-        delay(1000);
+        delay(500);
         digitalWrite(d1, LOW);
     }
 
     if(selection == "2"){
        digitalWrite(d2, HIGH);
-       delay(1000);
+       delay(500);
        digitalWrite(d2, LOW);
     }
 }
