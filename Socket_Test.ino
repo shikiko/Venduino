@@ -10,6 +10,7 @@ String ip = ""; //Store machine ip
 String output = ""; //Store data
 String data = ""; //String to store data
 int flag = 0; //Flag for data
+int httpCode = 0; //Setup flag
 
 // buffers for receiving and sending data through UDP
 char packetBuffer[UDP_TX_PACKET_MAX_SIZE + 1]; //buffer to hold incoming packet,
@@ -37,7 +38,7 @@ void setup() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
-    Serial.println("Connecting..");
+    Serial.println("Connecting to WiFi..");
   }
 
   Serial.print("Connected to WiFi. IP:");
@@ -69,11 +70,15 @@ void setup() {
   String contentLengthStr = String(JSONmessageBuffer); //Convert Char to String
   int contentLength = contentLengthStr.length(); //Find Content-Length
   http.addHeader("Content-Length", String(contentLength)); //Content-Length
-  int httpCode = http.POST(JSONmessageBuffer);   //Send the request
 
-  String payload = http.getString(); //Retrieve reply from Server
-  Serial.println(httpCode);   //Print HTTP return code
-  Serial.println(payload);    //Print request response payload
+  while (httpCode != 200){
+    httpCode = http.POST(JSONmessageBuffer);   //Send the request
+    String payload = http.getString(); //Retrieve reply from Server
+    Serial.println(httpCode);   //Print HTTP return code
+    Serial.println(payload);    //Print request response payload
+    Serial.println("Connecting to Server..");
+  }
+
   Serial.println("Setup completed..");
 }
 
@@ -81,13 +86,13 @@ void setup() {
 void power_motor(String selection) {
     if(selection == "1"){
         digitalWrite(d1, HIGH);
-        delay(500);
+        delay(85);
         digitalWrite(d1, LOW);
     }
 
     if(selection == "2"){
        digitalWrite(d2, HIGH);
-       delay(500);
+       delay(85);
        digitalWrite(d2, LOW);
     }
 }
