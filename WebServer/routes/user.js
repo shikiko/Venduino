@@ -180,6 +180,20 @@ router.post(
               .status(400)
               .send({ error: "gg", error });
           });
+          knex("SALES")
+            .insert([{
+                user_id: user.user_id,
+                machine_id: "-",
+                item_id: "-",
+                quantity: req.body.value,
+                price: "-",
+                type: "topup"
+            }]).catch(error => {
+              console.log(error);
+              return res
+                .status(400)
+                .send({ error: "gg", error });
+            });
       })
   }
 );
