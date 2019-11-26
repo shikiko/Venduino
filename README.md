@@ -1,7 +1,7 @@
 # Venduino
 An ICT1003 Project Application.
 
-Vending machine goodness with Arduino board and Tinycircuits 
+Vending machine goodness with Arduino board and Tinycircuits
 
 # WebServer
 
@@ -17,7 +17,7 @@ https://nodejs.org/ja/blog/release/v10.16.0/
 - bcrypt
 - knex
 
-The server hosts itself onto the localhost IP address (127.0.0.1) at port 8000, or any port modified and specified by the user. 
+The server hosts itself onto the localhost IP address (127.0.0.1) at port 8000, or any port modified and specified by the user.
 To access get API point, use any web browser, however it is recommended to use postman to test other API points.
 
 API point: /
@@ -85,3 +85,27 @@ API point: /api/inventory
 - Type: GET
 - Params required: NIL
 - Usage: Get all data of inventory in the database
+
+# App
+
+## Setup
+
+**Configuration**
+
+Modify `API_URL` in `config/index.ts`.
+
+**Prerequisites**
+
+*Have NodeJS & NPM/Yarn installed.*
+
+1. `npm install`
+2. `npm run start`
+
+### For building with IOS
+
+**Prerequisites**
+
+*Have cocoapods installed.*
+
+1. `cd ios`
+2. `pod install`

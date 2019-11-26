@@ -1,0 +1,3 @@
+diff --git a/node_modules/@react-native-community/cli/build/commands/server/external/xsel b/node_modules/@react-native-community/cli/build/commands/server/external/xsel
+old mode 100644
+new mode 100755

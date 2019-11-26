@@ -1,3 +1,9 @@
 /WebServer/node_modules
 */node_modules
 /node_modules
+
+/App/node_modules
+/App/ios/pods
+/App/ios/build
+/App/ios/DerivedData
+
