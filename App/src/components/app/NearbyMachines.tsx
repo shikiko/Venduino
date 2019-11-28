@@ -1,19 +1,19 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from "react";
 import {
   Layout,
   Text,
   withStyles,
   ThemedComponentProps,
   List,
-  ListItem,
-} from 'react-native-ui-kitten';
+  ListItem
+} from "react-native-ui-kitten";
 
 import MapView, {
   Marker,
   LatLng,
   Point,
-  MapViewProps,
-} from 'react-native-maps';
+  MapViewProps
+} from "react-native-maps";
 
 export type MachinePointProps = {
   id?: string;
@@ -52,7 +52,8 @@ const NearbyMachines = ({
       showsCompass
       showsIndoors
       showsUserLocation
-      {...props}>
+      {...props}
+    >
       {!loading &&
         data.map(marker => (
           <Marker
@@ -70,9 +71,9 @@ const NearbyMachines = ({
 
 export default withStyles(NearbyMachines, theme => ({
   mapview: {
-    flex: 1,
+    flex: 1
   },
   color: {
-    primary: theme['color-primary-default'],
-  },
+    primary: theme["color-primary-default"]
+  }
 }));

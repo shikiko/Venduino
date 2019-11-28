@@ -77,7 +77,7 @@ router.post("/login", (req, res) => {
     if (error || !user) {
       return res.status(400).json({ error });
     }
-    console.log('/login', user);
+    console.log("/login", user);
 
     /** This is what ends up in our JWT */
     const payload = {
@@ -113,7 +113,7 @@ router.patch("/", (req, res) => {
     .where("user_id", req.body.user_id)
     .then(data => {
       if (data.length == 0) {
-        return res.status(404).send({ error: "User not found."});
+        return res.status(404).send({ error: "User not found." });
       }
       knex("USER")
         .where({ user_id: req.body.user_id })
@@ -123,11 +123,9 @@ router.patch("/", (req, res) => {
         })
         .catch(error => {
           console.log(error);
-          return res
-            .status(400)
-            .send({ error});
+          return res.status(400).send({ error });
         });
-      res.status(200).send({ message: "User updated."});
+      res.status(200).send({ message: "User updated." });
     });
 });
 
@@ -139,11 +137,11 @@ router.delete("/", (req, res) => {
       console.log(error);
       return res.status(400).send(error);
     });
-  res
-    .status(200)
-    .send({ message: "Account ID: " + req.body.user_id + " has been successfully deleted"});
+  res.status(200).send({
+    message:
+      "Account ID: " + req.body.user_id + " has been successfully deleted"
+  });
 });
-
 
 router.post(
   "/topup",
@@ -161,7 +159,8 @@ router.post(
         }
         delete user.password;
 
-        const newBalance = user.balance + parseFloat(req.body.value);
+        const amount = parseFloat(req.body.value) || 0;
+        const newBalance = user.balance + amount;
         knex("USER")
           .where({ user_id: user.user_id })
           .update({
@@ -172,29 +171,29 @@ router.post(
               user: {
                 ...user,
                 balance: newBalance
-            } });
+              }
+            });
           })
           .catch(error => {
             console.log(error);
-            return res
-              .status(400)
-              .send({ error: "gg", error });
+            return res.status(400).send({ error: "gg", error });
           });
-          knex("SALES")
-            .insert([{
-                user_id: user.user_id,
-                machine_id: "-",
-                item_id: "-",
-                quantity: req.body.value,
-                price: "-",
-                type: "topup"
-            }]).catch(error => {
-              console.log(error);
-              return res
-                .status(400)
-                .send({ error: "gg", error });
-            });
-      })
+        knex("SALES")
+          .insert([
+            {
+              user_id: user.user_id,
+              machine_id: "-1",
+              item_id: "-1",
+              quantity: req.body.value,
+              price: amount,
+              type: "topup"
+            }
+          ])
+          .catch(error => {
+            console.log(error);
+            return res.status(400).send({ error: "gg", error });
+          });
+      });
   }
 );
 
@@ -203,7 +202,7 @@ router.post(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     if (!req.body.machine_id || !req.body.item_id || !req.body.quantity) {
-      return res.status(400).send({ error: "Incorrect parameters received."});
+      return res.status(400).send({ error: "Incorrect parameters received." });
     }
     var user_model = {};
     var machine_model = {};
@@ -236,7 +235,7 @@ router.post(
       .then(data => {
         user_model = data[0];
         if (user_model["price"] == 0) {
-          return res.status(400).send({ error: "Insufficient balance"});
+          return res.status(400).send({ error: "Insufficient balance" });
         }
         knex("MACHINE")
           .select("*")
@@ -264,7 +263,7 @@ router.post(
                       item_model["price"] * req.body.quantity
                     ) {
                       console.log("/buy: User does not have enough money");
-                      res.status(400).send({ error: "Insufficient balance"});
+                      res.status(400).send({ error: "Insufficient balance" });
                       return;
                     }
                     user_model["balance"] -= item_model["price"];
@@ -316,10 +315,9 @@ router.post(
           });
       });
 
-    res.status(200).send({ message: "Transaction successful."});
+    res.status(200).send({ message: "Transaction successful." });
   }
 );
-
 
 router.get(
   "/purchases",
@@ -335,10 +333,23 @@ router.get(
         knex("SALES")
           .offset(start)
           .limit(limit)
-          .select(["sale_id", "SALES.price", "SALES.item_id", "ITEMS.item_name", "quantity", "SALES.machine_id", "latitude", "longitude", "address", "machine.name", "SALES.timestamp"])
-          .leftJoin('machine', 'SALES.machine_id', 'machine.machine_id')
-          .leftJoin('ITEMS', 'SALES.item_id', 'ITEMS.item_id')
-          .orderBy('timestamp', 'desc') // recent first
+          .select([
+            "sale_id",
+            "SALES.price",
+            "SALES.item_id",
+            "ITEMS.item_name",
+            "quantity",
+            "SALES.machine_id",
+            "latitude",
+            "longitude",
+            "address",
+            "machine.name",
+            "SALES.timestamp",
+            "SALES.type"
+          ])
+          .leftJoin("machine", "SALES.machine_id", "machine.machine_id")
+          .leftJoin("ITEMS", "SALES.item_id", "ITEMS.item_id")
+          .orderBy("timestamp", "desc") // recent first
           .then(data => {
             //Return retrieved data as JSON format
             return res.status(200).json({ purchases: data });

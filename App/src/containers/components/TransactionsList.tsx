@@ -1,14 +1,14 @@
-import React from 'react';
-import { Dimensions } from 'react-native';
-import useSWR, { trigger } from 'swr';
+import React from "react";
+import { Dimensions } from "react-native";
+import useSWR, { trigger } from "swr";
 import {
   Layout,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
 
-import { NewTransactionsList as TransactionsListBase } from '@src/components/app';
-import { UserService } from '@src/core/services';
+import { NewTransactionsList as TransactionsListBase } from "@src/components/app";
+import { UserService } from "@src/core/services";
 
 export type TransactionsListProps = ThemedComponentProps & {
   navigation: any;
@@ -16,13 +16,11 @@ export type TransactionsListProps = ThemedComponentProps & {
 
 export const fetchTransactions = async () => {
   const res = await UserService.fetchPurchases();
-  return res.purchases
-    .filter((type: string) => type === 'buy')
-    .map((purchase: any) => ({
-      ...purchase,
-      title: `${purchase.quantity}x ${purchase.item_name}`,
-      description: purchase.name,
-    }));
+  return res.purchases.map((purchase: any) => ({
+    ...purchase,
+    title: `${purchase.quantity}x ${purchase.item_name}`,
+    description: purchase.name
+  }));
 };
 
 const TransactionsList = ({
@@ -30,18 +28,21 @@ const TransactionsList = ({
   navigation,
   ...props
 }: TransactionsListProps) => {
-  const { data: purchases, isValidating } = useSWR(
-    '/api/user/purchases',
+  const { data, isValidating } = useSWR(
+    "/api/user/purchases/all",
     fetchTransactions,
     {
-      refreshInterval: 2000,
-    },
+      refreshInterval: 2000
+    }
   );
 
+  const purchases = data ? data : [];
+
   const onItemPress = (item: any) => {
-    navigation.navigate('TransactionsDetail', { transaction: item });
+    navigation.navigate("TransactionsDetail", { transaction: item });
   };
 
+  if (purchases.length === 0) return <></>;
   return (
     <>
       <Layout style={themedStyle.listContainer}>
@@ -50,7 +51,10 @@ const TransactionsList = ({
           data={purchases}
           loading={isValidating}
           onItemPress={onItemPress}
-          onRefresh={() => trigger('/api/user/purchases')}
+          onRefresh={() => {
+            console.log("yes refresh");
+            trigger("/api/user/purchases/all");
+          }}
         />
       </Layout>
     </>
@@ -60,6 +64,6 @@ const TransactionsList = ({
 export default withStyles(TransactionsList, theme => ({
   listContainer: {
     // flex: 1,
-    height: Dimensions.get('window').height,
-  },
+    height: Dimensions.get("window").height
+  }
 }));

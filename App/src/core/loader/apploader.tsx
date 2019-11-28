@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { ImageRequireSource } from 'react-native';
-import SplashScreen from 'react-native-splash-screen';
-import { Asset } from 'expo-asset';
-import * as Font from 'expo-font';
+import React, { useState, useEffect } from "react";
+import { ImageRequireSource } from "react-native";
+import SplashScreen from "react-native-splash-screen";
+import { Asset } from "expo-asset";
+import * as Font from "expo-font";
 
 export interface IFonts {
   [key: string]: number;
@@ -48,7 +48,7 @@ export const ApplicationLoader = ({ assets = {}, children }: Props) => {
       // if (assets.images) tasks.push(...loadImages(assets.images));
 
       await Promise.all(tasks);
-      console.log('done loading resources');
+      console.log("done loading resources");
       setLoaded(true);
     };
 

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Image } from 'react-native';
-import { Layout, Text, withStyles } from 'react-native-ui-kitten';
-import { Button } from '@src/components/common';
-import { StartIllustration } from '@src/assets/icons';
+import React from "react";
+import { Image } from "react-native";
+import { Layout, Text, withStyles } from "react-native-ui-kitten";
+import { Button } from "@src/components/common";
+import { StartIllustration } from "@src/assets/icons";
 
 const LandingComponent = ({ themedStyle, navigation }: any) => {
   return (
@@ -20,8 +20,9 @@ const LandingComponent = ({ themedStyle, navigation }: any) => {
           <Button
             size="giant"
             onPress={() => {
-              navigation.navigate('Signup');
-            }}>
+              navigation.navigate("Signup");
+            }}
+          >
             Get Started
           </Button>
           <Button
@@ -29,8 +30,9 @@ const LandingComponent = ({ themedStyle, navigation }: any) => {
             size="giant"
             appearance="outline"
             onPress={() => {
-              navigation.navigate('Signin');
-            }}>
+              navigation.navigate("Signin");
+            }}
+          >
             Already have an account
           </Button>
         </Layout>
@@ -42,23 +44,23 @@ const LandingComponent = ({ themedStyle, navigation }: any) => {
 export const Landing = withStyles(LandingComponent, () => ({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   illustrationContainer: {
     marginBottom: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   helloLabel: {
     marginTop: 12,
     lineHeight: 48,
     fontSize: 48,
-    marginBottom: 32,
+    marginBottom: 32
   },
   buttonSpace: {
-    marginTop: 16,
+    marginTop: 16
   },
   buttonOutline: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: "transparent"
+  }
 }));

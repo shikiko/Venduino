@@ -1,7 +1,7 @@
-import React from 'react';
+import React from "react";
 
-import { AppLogo } from '@src/assets/icons';
-import { Navbar, NavbarProps } from './bar';
+import { AppLogo } from "@src/assets/icons";
+import { Navbar, NavbarProps } from "./bar";
 
 const Title = (): React.ReactElement => <AppLogo height={32} width={150} />;
 

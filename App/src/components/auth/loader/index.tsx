@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-import { StyleSheet } from 'react-native';
-import { Layout, Spinner } from 'react-native-ui-kitten';
-import { NavigationProp } from '@react-navigation/core';
+import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-community/async-storage";
+import { StyleSheet } from "react-native";
+import { Layout, Spinner } from "react-native-ui-kitten";
+import { NavigationProp } from "@react-navigation/core";
 
-import { STORAGE_USER_TOKEN_KEY } from '@src/config';
+import { STORAGE_USER_TOKEN_KEY } from "@src/config";
 
 type Props = {
   navigation: NavigationProp<any>;
@@ -12,22 +12,22 @@ type Props = {
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center"
+  }
 });
 
 export const AuthLoadingScreen = ({ navigation }: Props) => {
   const [show, setShow] = useState<boolean>(false);
   useEffect(() => {
-    console.log('Authing');
+    console.log("Authing");
     const checkToken = async () => {
       const userToken = await AsyncStorage.getItem(STORAGE_USER_TOKEN_KEY);
-      console.log('Got token', userToken);
+      console.log("Got token", userToken);
       navigation.reset({
         index: 0,
-        routes: [{ name: userToken ? 'App' : 'Auth' }],
+        routes: [{ name: userToken ? "App" : "Auth" }]
       });
     };
     checkToken();

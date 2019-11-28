@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Layout, withStyles, Input } from 'react-native-ui-kitten';
+import React, { useState } from "react";
+import { Layout, withStyles, Input } from "react-native-ui-kitten";
 
 const TopupFormComponent = ({
   value,
   loading = false,
   onChange,
-  themedStyle,
+  themedStyle
 }: any) => {
   if (!value) return <Layout style={themedStyle.container} />;
   return (
@@ -16,7 +16,7 @@ const TopupFormComponent = ({
         value={value.amount.value.toString()}
         status={value.amount.status}
         caption={value.amount.caption}
-        onChangeText={v => onChange('amount', v)}
+        onChangeText={v => onChange("amount", v)}
         disabled={loading}
         keyboardType="numeric"
       />
@@ -27,6 +27,6 @@ const TopupFormComponent = ({
 export const TopupForm = withStyles(TopupFormComponent, () => ({
   container: {},
   input: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 }));

@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import AsyncStorage from '@react-native-community/async-storage';
-import { Layout, Text, withStyles, Icon } from 'react-native-ui-kitten';
+import React, { useState } from "react";
+import AsyncStorage from "@react-native-community/async-storage";
+import { Layout, Text, withStyles, Icon } from "react-native-ui-kitten";
 
-import { Button, Separator } from '@src/components/common';
-import { SigninForm } from '@src/components/forms';
-import { GoogleLogo } from '@src/assets/icons';
-import { UserService } from '@src/core/services';
+import { Button, Separator } from "@src/components/common";
+import { SigninForm } from "@src/components/forms";
+import { GoogleLogo } from "@src/assets/icons";
+import { UserService } from "@src/core/services";
 
 const StarIcon = (style: any) => <GoogleLogo />;
 const DEFAULT_FORM = {
   username: {
-    value: '',
+    value: ""
   },
   password: {
-    value: '',
-  },
+    value: ""
+  }
 };
 const SigninComponent = ({ themedStyle, navigation }: any) => {
   const [form, setForm] = useState<any>(DEFAULT_FORM);
@@ -26,9 +26,9 @@ const SigninComponent = ({ themedStyle, navigation }: any) => {
         ...form,
         [key]: {
           value,
-          status: '',
-          caption: null,
-        },
+          status: "",
+          caption: null
+        }
       };
       setForm(newForm);
     }
@@ -39,18 +39,18 @@ const SigninComponent = ({ themedStyle, navigation }: any) => {
       setLoading(true);
       const res = await UserService.login({
         username: form.username.value,
-        password: form.password.value,
+        password: form.password.value
       });
-      console.log('res');
+      console.log("res");
       console.log(res);
-      navigation.navigate('App');
+      navigation.navigate("App");
     } catch (error) {
       const newForm = form;
       Object.keys(newForm).map(key => {
         newForm[key] = {
           ...form[key],
-          status: 'danger',
-          caption: 'Invalid username or password',
+          status: "danger",
+          caption: "Invalid username or password"
         };
         return null;
       });
@@ -63,7 +63,7 @@ const SigninComponent = ({ themedStyle, navigation }: any) => {
     <>
       <Layout style={themedStyle.container}>
         <Text style={themedStyle.headerLabel} category="h1">
-          Welcome back,{'\n'}
+          Welcome back,{"\n"}
           Sign in
         </Text>
 
@@ -81,8 +81,9 @@ const SigninComponent = ({ themedStyle, navigation }: any) => {
             <Button
               appearance="link"
               onPress={() => {
-                navigation.navigate('Landing');
-              }}>
+                navigation.navigate("Landing");
+              }}
+            >
               Reset Now
             </Button>
           </Layout>
@@ -97,34 +98,34 @@ const SigninComponent = ({ themedStyle, navigation }: any) => {
 export const Signin = withStyles(SigninComponent, theme => ({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   buttonContainer: {
-    marginTop: 24,
+    marginTop: 24
   },
   resetContainer: {
     marginTop: 16,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   },
   resetLabel: {
-    color: theme['text-hint-color'],
+    color: theme["text-hint-color"]
   },
   headerLabel: {
-    marginBottom: 32,
+    marginBottom: 32
   },
   buttonSpace: {
-    marginTop: 16,
+    marginTop: 16
   },
   buttonOutline: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent"
   },
   buttonGhost: {
-    color: theme['text-hint-color'],
+    color: theme["text-hint-color"]
   },
   separator: {
     marginTop: 24,
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 }));

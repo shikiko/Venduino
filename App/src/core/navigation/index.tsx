@@ -1,12 +1,12 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationNativeContainer } from '@react-navigation/native';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
+import { NavigationNativeContainer } from "@react-navigation/native";
 
-import { AuthLoadingScreen } from '@src/components/auth';
+import { AuthLoadingScreen } from "@src/components/auth";
 
-import AppStack from './appstack';
-import AuthStack from './authstack';
-import OnboardingStack from './onboardingstack';
+import AppStack from "./appstack";
+import AuthStack from "./authstack";
+import OnboardingStack from "./onboardingstack";
 
 const Stack = createStackNavigator();
 
@@ -15,8 +15,9 @@ const Routes = () => (
     initialRouteName="AuthLoader"
     headerMode="none"
     screenOptions={{
-      gestureEnabled: false,
-    }}>
+      gestureEnabled: false
+    }}
+  >
     <Stack.Screen name="AuthLoader" component={AuthLoadingScreen} />
     <Stack.Screen name="Auth" component={AuthStack} />
     <Stack.Screen name="Onboarding" component={OnboardingStack} />

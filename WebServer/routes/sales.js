@@ -13,6 +13,7 @@ router.get("/", (req, res) => {
     .select("*")
     .then(data => {
       //Return retrieved data as JSON format
+      console.log(data);
       return res.status(200).json({
         message: "success",
         data: data

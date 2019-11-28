@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { Layout, withStyles, Input } from 'react-native-ui-kitten';
+import React, { useState } from "react";
+import { Layout, withStyles, Input } from "react-native-ui-kitten";
 
 const SigninFormComponent = ({
   value,
   loading = false,
   onChange,
-  themedStyle,
+  themedStyle
 }: any) => {
   return (
     <Layout style={themedStyle.container}>
@@ -15,7 +15,7 @@ const SigninFormComponent = ({
         value={value.username.value}
         status={value.username.status}
         caption={value.username.caption}
-        onChangeText={v => onChange('username', v)}
+        onChangeText={v => onChange("username", v)}
         disabled={loading}
       />
       <Input
@@ -24,7 +24,7 @@ const SigninFormComponent = ({
         value={value.password.value}
         status={value.username.status}
         caption={value.username.caption}
-        onChangeText={v => onChange('password', v)}
+        onChangeText={v => onChange("password", v)}
         secureTextEntry
         disabled={loading}
       />
@@ -35,6 +35,6 @@ const SigninFormComponent = ({
 export const SigninForm = withStyles(SigninFormComponent, () => ({
   container: {},
   input: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 }));

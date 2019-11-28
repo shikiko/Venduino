@@ -1,6 +1,6 @@
-import React from 'react';
-import { ThemedComponentProps, withStyles } from '@kitten/theme';
-import { Input, InputProps } from '@kitten/ui';
+import React from "react";
+import { ThemedComponentProps, withStyles } from "@kitten/theme";
+import { Input, InputProps } from "@kitten/ui";
 
 interface ComponentProps extends InputProps {
   validator: (value: string) => boolean;
@@ -26,7 +26,7 @@ class ValidationInputComponent extends React.Component<
   State
 > {
   public state: State = {
-    value: this.props.value,
+    value: this.props.value
   };
 
   public componentDidUpdate(prevProps: ValidationInputProps, prevState: State) {
@@ -74,7 +74,7 @@ class ValidationInputComponent extends React.Component<
     const { value } = this.state;
 
     if (value && value.length) {
-      return this.isValid(value) ? 'success' : 'danger';
+      return this.isValid(value) ? "success" : "danger";
     }
 
     return undefined;
@@ -98,5 +98,5 @@ class ValidationInputComponent extends React.Component<
 }
 
 export const ValidationInput = withStyles(ValidationInputComponent, () => ({
-  container: {},
+  container: {}
 }));

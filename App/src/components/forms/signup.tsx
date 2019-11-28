@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Layout, withStyles, Input } from 'react-native-ui-kitten';
+import React, { useState } from "react";
+import { Layout, withStyles, Input } from "react-native-ui-kitten";
 
 const SignupFormComponent = ({ themedStyle }: any) => {
   const [status, setStatus] = useState();
@@ -30,6 +30,6 @@ const SignupFormComponent = ({ themedStyle }: any) => {
 export const SignupForm = withStyles(SignupFormComponent, () => ({
   container: {},
   input: {
-    marginBottom: 12,
-  },
+    marginBottom: 12
+  }
 }));

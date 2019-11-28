@@ -1,6 +1,6 @@
-import React from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
-import { withStyles } from 'react-native-ui-kitten';
+import React from "react";
+import { ImageBackground, StyleSheet, View } from "react-native";
+import { withStyles } from "react-native-ui-kitten";
 
 type Props = {
   themedStyle: any;
@@ -37,7 +37,7 @@ class ImageOverlayComponent extends React.Component<Props> {
 
 export const ImageOverlay = withStyles(ImageOverlayComponent, () => ({
   overlay: {
-    backgroundColor: 'rgba(0, 0, 0, 0.45)',
-    ...StyleSheet.absoluteFillObject,
-  },
+    backgroundColor: "rgba(0, 0, 0, 0.45)",
+    ...StyleSheet.absoluteFillObject
+  }
 }));

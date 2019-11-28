@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import * as Permissions from 'expo-permissions';
-import { Platform } from 'react-native';
-import { RNCamera as Camera, CameraType, FlashMode } from 'react-native-camera';
+import React, { useState, useEffect } from "react";
+import * as Permissions from "expo-permissions";
+import { Platform } from "react-native";
+import { RNCamera as Camera, CameraType, FlashMode } from "react-native-camera";
 import {
   Layout,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
 
-import { Touchable } from '@src/components/common';
-import { FlashOnIcon, FlashOffIcon } from '@src/assets/icons';
-import ZoomView from './zoomview';
+import { Touchable } from "@src/components/common";
+import { FlashOnIcon, FlashOffIcon } from "@src/assets/icons";
+import ZoomView from "./zoomview";
 
 const { FlashMode: CameraFlashModes, Type: CameraTypes } = Camera.Constants;
 const MAX_ZOOM = 8; // iOS only
-const ZOOM_F = Platform.OS === 'ios' ? 0.0005 : 0.08;
+const ZOOM_F = Platform.OS === "ios" ? 0.0005 : 0.08;
 
 export type Props = ThemedComponentProps & {
   onBarcode?: (barcode: any) => void;
@@ -33,7 +33,7 @@ const CameraComponent = ({ themedStyle, onBarcode }: Props) => {
   useEffect(() => {
     const getPermission = async () => {
       const { status } = await Permissions.askAsync(Permissions.CAMERA);
-      setPermission(status === 'granted');
+      setPermission(status === "granted");
     };
 
     getPermission();
@@ -47,7 +47,7 @@ const CameraComponent = ({ themedStyle, onBarcode }: Props) => {
     setFlash(
       flash === CameraFlashModes.off
         ? CameraFlashModes.torch
-        : CameraFlashModes.off,
+        : CameraFlashModes.off
     );
   };
 
@@ -66,9 +66,10 @@ const CameraComponent = ({ themedStyle, onBarcode }: Props) => {
             height: parseFloat(bounds.size.height),
             width: parseFloat(bounds.size.width),
             left: parseFloat(bounds.origin.x),
-            top: parseFloat(bounds.origin.y),
-          },
-        ]}>
+            top: parseFloat(bounds.origin.y)
+          }
+        ]}
+      >
         {/* <Text
           style={{
             color: '#F00',
@@ -106,29 +107,33 @@ const CameraComponent = ({ themedStyle, onBarcode }: Props) => {
       }}
       onZoomEnd={() => {
         setPinch(1);
-      }}>
+      }}
+    >
       <Camera
         maxZoom={MAX_ZOOM}
         zoom={zoom}
         style={themedStyle.flex}
         type={type}
         flashMode={flash}
-        onBarCodeRead={handleBarcode}>
+        onBarCodeRead={handleBarcode}
+      >
         <>
           {/* {barcode && renderBarcode(barcode)} */}
           <Layout
             style={{
               flex: 1,
-              backgroundColor: 'transparent',
-              flexDirection: 'row',
-            }}>
+              backgroundColor: "transparent",
+              flexDirection: "row"
+            }}
+          >
             <Layout style={themedStyle.crosshairContainer}>
               <Layout style={themedStyle.crosshair} />
             </Layout>
             <Touchable
               feedback="opacity"
               style={themedStyle.control}
-              onPress={toggleFlash}>
+              onPress={toggleFlash}
+            >
               {flash === CameraFlashModes.off ? (
                 <FlashOnIcon style={themedStyle.controlIcon} />
               ) : (
@@ -152,44 +157,44 @@ const CameraComponent = ({ themedStyle, onBarcode }: Props) => {
 
 export default withStyles(CameraComponent, theme => ({
   flex: {
-    flex: 1,
+    flex: 1
   },
   crosshairContainer: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'transparent',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "transparent"
   },
   crosshair: {
     borderWidth: 2,
     borderRadius: 4,
     width: 200,
     height: 200,
-    borderColor: 'rgba(255,255,255,0.3)',
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderColor: "rgba(255,255,255,0.3)",
+    backgroundColor: "rgba(255,255,255,0.1)"
   },
   control: {
     flex: 1,
-    alignSelf: 'flex-end',
-    alignItems: 'center',
-    marginBottom: 16,
+    alignSelf: "flex-end",
+    alignItems: "center",
+    marginBottom: 16
   },
   controlIcon: {
     height: 38,
     width: 38,
-    color: theme['text-control-color'],
+    color: theme["text-control-color"]
   },
   barcodeMask: {
     borderWidth: 2,
     borderRadius: 4,
-    position: 'absolute',
-    borderColor: theme['color-primary-transparent-200'],
-    justifyContent: 'center',
-    backgroundColor: theme['color-primary-transparent-100'],
-    padding: 10,
-  },
+    position: "absolute",
+    borderColor: theme["color-primary-transparent-200"],
+    justifyContent: "center",
+    backgroundColor: theme["color-primary-transparent-100"],
+    padding: 10
+  }
 }));

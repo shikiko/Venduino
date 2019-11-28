@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import useSWR from 'swr';
+import React, { useState } from "react";
+import useSWR from "swr";
 import {
   Layout,
   Text,
   withStyles,
   ThemedComponentProps,
-  Button,
-} from 'react-native-ui-kitten';
-import { useSafeArea } from 'react-native-safe-area-context';
+  Button
+} from "react-native-ui-kitten";
+import { useSafeArea } from "react-native-safe-area-context";
 
-import { NearbyMachines, MachinePointProps } from '@src/components/app';
-import { MachineService } from '@src/core/services';
+import { NearbyMachines, MachinePointProps } from "@src/components/app";
+import { MachineService } from "@src/core/services";
 
 export const fetchMachines = async () => {
   const res = await MachineService.fetchAll();
@@ -21,8 +21,8 @@ export const fetchMachines = async () => {
     description: machine.address,
     location: {
       latitude: parseFloat(machine.latitude),
-      longitude: parseFloat(machine.longitude),
-    },
+      longitude: parseFloat(machine.longitude)
+    }
   }));
 };
 
@@ -30,12 +30,12 @@ export type Props = ThemedComponentProps & any;
 
 const DEFAULT_MARKER = {
   id: null,
-  title: 'No point selected',
-  description: 'Select a vending machine to continue',
+  title: "No point selected",
+  description: "Select a vending machine to continue"
 };
 
 const ScannerComponent = ({ themedStyle, navigation }: Props) => {
-  const { data: machines } = useSWR('/api/machine', fetchMachines);
+  const { data: machines } = useSWR("/api/machine", fetchMachines);
 
   const [marker = DEFAULT_MARKER, setMarker] = useState<MachinePointProps>();
   const insets = useSafeArea();
@@ -57,11 +57,12 @@ const ScannerComponent = ({ themedStyle, navigation }: Props) => {
             style={themedStyle.button}
             onPress={() => {
               console.log(marker);
-              navigation.navigate('MachineMenu', {
+              navigation.navigate("MachineMenu", {
                 marker,
-                machineId: marker.id,
+                machineId: marker.id
               });
-            }}>
+            }}
+          >
             Buy item
           </Button>
         )}
@@ -74,12 +75,12 @@ export default withStyles(ScannerComponent, theme => ({
   container: {
     flex: 0.5,
     padding: 16,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
   text: {
-    textAlign: 'center',
+    textAlign: "center"
   },
   button: {
-    marginTop: 16,
-  },
+    marginTop: 16
+  }
 }));

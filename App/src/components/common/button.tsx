@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   Button as LibButton,
   ButtonProps as LibButtonProps,
   withStyles,
   ThemedComponentProps,
-  Text,
-} from 'react-native-ui-kitten';
+  Text
+} from "react-native-ui-kitten";
 
-import { textStyle as CoreTextStyle } from '@src/core/themes/styles';
-import { Touchable } from '@src/components/common';
+import { textStyle as CoreTextStyle } from "@src/core/themes/styles";
+import { Touchable } from "@src/components/common";
 
 export type ButtonProps = LibButtonProps & ThemedComponentProps & {};
 
@@ -16,11 +16,11 @@ const ButtonComponent = ({
   themedStyle,
   style,
   textStyle,
-  appearance = 'filled',
+  appearance = "filled",
   children,
   ...props
 }: ButtonProps) => {
-  if (appearance === 'link') {
+  if (appearance === "link") {
     return (
       <Touchable {...props}>
         <Text style={themedStyle.text}>{children}</Text>
@@ -33,7 +33,8 @@ const ButtonComponent = ({
       style={[themedStyle.button, style]}
       textStyle={[themedStyle.text, textStyle]}
       appearance={appearance}
-      {...props}>
+      {...props}
+    >
       {children}
     </LibButton>
   );
@@ -41,6 +42,6 @@ const ButtonComponent = ({
 
 export const Button = withStyles(ButtonComponent, () => ({
   text: {
-    ...CoreTextStyle.action,
-  },
+    ...CoreTextStyle.action
+  }
 }));

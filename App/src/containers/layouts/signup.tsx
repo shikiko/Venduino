@@ -1,7 +1,7 @@
-import React from 'react';
-import { Layout, Text, withStyles } from 'react-native-ui-kitten';
-import { Button } from '@src/components/common';
-import { SignupForm } from '@src/components/forms';
+import React from "react";
+import { Layout, Text, withStyles } from "react-native-ui-kitten";
+import { Button } from "@src/components/common";
+import { SignupForm } from "@src/components/forms";
 
 // import StartIllustration from '@src/assets/icons/illustrations/start.svg';
 
@@ -10,7 +10,7 @@ const SignupComponent = ({ themedStyle, navigation }: any) => {
     <>
       <Layout style={themedStyle.container}>
         <Text style={themedStyle.headerLabel} category="h1">
-          Hello,{'\n'}
+          Hello,{"\n"}
           Create an account
         </Text>
 
@@ -20,8 +20,9 @@ const SignupComponent = ({ themedStyle, navigation }: any) => {
           <Button
             size="giant"
             onPress={() => {
-              navigation.navigate('App');
-            }}>
+              navigation.navigate("App");
+            }}
+          >
             Create Account
           </Button>
 
@@ -32,8 +33,9 @@ const SignupComponent = ({ themedStyle, navigation }: any) => {
             <Button
               appearance="link"
               onPress={() => {
-                navigation.navigate('Signin');
-              }}>
+                navigation.navigate("Signin");
+              }}
+            >
               Login Now
             </Button>
           </Layout>
@@ -46,27 +48,27 @@ const SignupComponent = ({ themedStyle, navigation }: any) => {
 export const Signup = withStyles(SignupComponent, theme => ({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   buttonContainer: {
-    marginTop: 8,
+    marginTop: 8
   },
   resetContainer: {
     marginTop: 16,
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center"
   },
   resetLabel: {
-    color: theme['text-hint-color'],
+    color: theme["text-hint-color"]
   },
   headerLabel: {
-    marginBottom: 32,
+    marginBottom: 32
   },
   buttonSpace: {
-    marginTop: 16,
+    marginTop: 16
   },
   buttonOutline: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: "transparent"
+  }
 }));

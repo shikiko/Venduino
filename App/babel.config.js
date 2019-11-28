@@ -1,4 +1,4 @@
-const path = require('path');
+const path = require("path");
 
 // FIXME: Resolve `transform[stderr]: Could not resolve` command-line warnings.
 // FIXME: Reproducible when starting with clearing cache (npm start -- -c)
@@ -8,20 +8,20 @@ const path = require('path');
 
 const KITTEN_PATH = path.resolve(
   __dirname,
-  './node_modules/react-native-ui-kitten',
+  "./node_modules/react-native-ui-kitten"
 );
 
 const moduleResolverConfig = {
-  root: path.resolve('./'),
+  root: path.resolve("./"),
   alias: {
-    '@kitten/theme': path.resolve(KITTEN_PATH, 'theme'),
-    '@kitten/ui': path.resolve(KITTEN_PATH, 'ui'),
-  },
+    "@kitten/theme": path.resolve(KITTEN_PATH, "theme"),
+    "@kitten/ui": path.resolve(KITTEN_PATH, "ui")
+  }
 };
 
 module.exports = {
-  presets: ['module:metro-react-native-babel-preset'],
+  presets: ["module:metro-react-native-babel-preset"],
   plugins: [
-    [require.resolve('babel-plugin-module-resolver'), moduleResolverConfig],
-  ],
+    [require.resolve("babel-plugin-module-resolver"), moduleResolverConfig]
+  ]
 };

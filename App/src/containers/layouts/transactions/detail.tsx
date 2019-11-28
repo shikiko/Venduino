@@ -1,21 +1,21 @@
-import React from 'react';
-import { Layout, Text, withStyles } from 'react-native-ui-kitten';
+import React from "react";
+import { Layout, Text, withStyles } from "react-native-ui-kitten";
 
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 import {
   NearbyMachines as MachineMap,
-  MachinePointProps,
-} from '@src/components/app';
-import { Button, Separator } from '@src/components/common';
+  MachinePointProps
+} from "@src/components/app";
+import { Button, Separator } from "@src/components/common";
 
 dayjs.extend(relativeTime);
 
 const TransactionsDetailsComponent = ({
   themedStyle,
   navigation,
-  route,
+  route
 }: any) => {
   const {
     transaction: {
@@ -27,8 +27,8 @@ const TransactionsDetailsComponent = ({
       address,
       name: machineName,
       machine_id: machineId,
-      timestamp,
-    },
+      timestamp
+    }
   } = route.params;
   return (
     <>
@@ -43,8 +43,8 @@ const TransactionsDetailsComponent = ({
           <Text appearance="hint">
             {dayjs(timestamp).format(
               `H:mm A - D MMM ${
-                dayjs(timestamp).isSame(dayjs(), 'year') ? '' : 'YY'
-              }`,
+                dayjs(timestamp).isSame(dayjs(), "year") ? "" : "YY"
+              }`
             )}
           </Text>
           <Layout>
@@ -70,9 +70,9 @@ const TransactionsDetailsComponent = ({
                   description: address,
                   location: {
                     latitude: parseFloat(latitude),
-                    longitude: parseFloat(longitude),
-                  },
-                },
+                    longitude: parseFloat(longitude)
+                  }
+                }
               ]}
             />
           </Layout>
@@ -86,39 +86,39 @@ export default withStyles(TransactionsDetailsComponent, theme => ({
   container: {
     flex: 1,
     paddingHorizontal: 16,
-    paddingVertical: 32,
+    paddingVertical: 32
   },
   topContainer: {
-    alignItems: 'center',
+    alignItems: "center"
   },
   titleContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row"
   },
   quantity: {
-    color: theme['text-disabled-color'],
-    marginRight: 4,
+    color: theme["text-disabled-color"],
+    marginRight: 4
   },
   time: {
-    color: theme['text-hint-color'],
+    color: theme["text-hint-color"]
   },
   title: {
-    color: theme['text-basic-color'],
+    color: theme["text-basic-color"]
   },
   price: {
-    fontWeight: 'normal',
-    color: theme['color-primary-default'],
+    fontWeight: "normal",
+    color: theme["color-primary-default"]
   },
   mapContainer: {
     marginVertical: 16,
-    height: 128,
+    height: 128
   },
   separatorContainer: {
-    alignItems: 'center',
+    alignItems: "center"
   },
   separator: {
     width: 128,
     marginTop: 48,
-    marginBottom: 32,
-  },
+    marginBottom: 32
+  }
 }));

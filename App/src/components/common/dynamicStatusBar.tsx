@@ -1,14 +1,14 @@
-import React from 'react';
+import React from "react";
 import {
   View,
   StatusBar,
   ViewProps,
   StatusBarStyle,
-  Platform,
-} from 'react-native';
-import { ThemedComponentProps, ThemeType, withStyles } from '@kitten/theme';
-import { ThemeKey } from '@src/core/themes';
-import Constants from 'expo-constants';
+  Platform
+} from "react-native";
+import { ThemedComponentProps, ThemeType, withStyles } from "@kitten/theme";
+import { ThemeKey } from "@src/core/themes";
+import Constants from "expo-constants";
 
 interface ComponentProps {
   currentTheme: ThemeKey;
@@ -20,10 +20,10 @@ export type DynamicStatusBarProps = ThemedComponentProps &
 
 class DynamicStatusBarComponent extends React.Component<DynamicStatusBarProps> {
   private getStatusBarContent = (): StatusBarStyle => {
-    if (this.props.currentTheme === 'Light') {
-      return 'light-content';
+    if (this.props.currentTheme === "Light") {
+      return "light-content";
     }
-    return 'dark-content';
+    return "dark-content";
   };
 
   public render(): React.ReactNode {
@@ -48,11 +48,11 @@ export const DynamicStatusBar = withStyles(
   DynamicStatusBarComponent,
   (theme: ThemeType) => ({
     container: {
-      backgroundColor: theme['background-basic-color-1'], // theme['background-basic-color-1'],
+      backgroundColor: theme["background-basic-color-1"], // theme['background-basic-color-1'],
       height: Platform.select({
         ios: Constants.statusBarHeight,
-        android: 0,
-      }),
-    },
-  }),
+        android: 0
+      })
+    }
+  })
 );

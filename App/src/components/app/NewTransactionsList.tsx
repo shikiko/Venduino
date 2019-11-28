@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { Dimensions, ViewProps, RefreshControl } from 'react-native';
+import React, { useState } from "react";
+import { Dimensions, ViewProps, RefreshControl } from "react-native";
 import {
   Layout as View,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
 import {
   RecyclerListView,
   DataProvider,
-  LayoutProvider,
-} from 'recyclerlistview';
+  LayoutProvider
+} from "recyclerlistview";
 
-import { Touchable } from '@src/components/common';
-import dayjs from 'dayjs';
-import relativeTime from 'dayjs/plugin/relativeTime';
+import { Touchable } from "@src/components/common";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 
 dayjs.extend(relativeTime);
 
@@ -40,12 +40,12 @@ export type NewTransactionsListProps = ThemedComponentProps &
 const NewTransactionsListComponent = ({
   themedStyle,
   data,
-  loading,
+  loading = false,
   onItemPress,
   onRefresh,
   ...props
 }: NewTransactionsListProps) => {
-  const { width } = Dimensions.get('window');
+  const { width } = Dimensions.get("window");
   const layoutProvider = new LayoutProvider(
     index => {
       return index;
@@ -53,20 +53,44 @@ const NewTransactionsListComponent = ({
     (type, dimension) => {
       dimension.height = ROW_HEIGHT; // eslint-disable-line no-param-reassign
       dimension.width = width; // eslint-disable-line no-param-reassign
-    },
+    }
   );
 
   const [listData] = useState(dataProvider.cloneWithRows(data));
 
   const rowRenderer = (type: any, rowData: any) => {
-    const { quantity, item_name: itemName, name, timestamp, price } = rowData;
+    const {
+      quantity,
+      item_name: itemName,
+      name,
+      timestamp,
+      price,
+      type: saleType
+    } = rowData;
     const time = dayjs(timestamp).fromNow();
+    if (saleType === "topup")
+      return (
+        <View style={themedStyle.rowContainer} {...props}>
+          <View style={themedStyle.rowDetailContainer}>
+            <View style={themedStyle.titleContainer}>
+              <Text style={themedStyle.title}>{name}</Text>
+            </View>
+            <Text style={themedStyle.subtitle}>{`${time}`}</Text>
+          </View>
+          <View style={themedStyle.accessoryContainer}>
+            <Text
+              style={[themedStyle.price, { color: "green" }]}
+            >{`+ $${price}`}</Text>
+          </View>
+        </View>
+      );
     return (
       <Touchable
         feedback="raised"
         onPress={() => {
           if (onItemPress) onItemPress(rowData);
-        }}>
+        }}
+      >
         <View style={themedStyle.rowContainer} {...props}>
           <View style={themedStyle.rowDetailContainer}>
             <View style={themedStyle.titleContainer}>
@@ -88,45 +112,45 @@ const NewTransactionsListComponent = ({
       layoutProvider={layoutProvider}
       dataProvider={listData}
       rowRenderer={rowRenderer}
-      scrollViewProps={{
-        refreshControl: (
-          <RefreshControl
-            refreshing={loading}
-            onRefresh={() => {
-              if (onRefresh) onRefresh();
-            }}
-          />
-        ),
-      }}
+      // scrollViewProps={{
+      //   refreshControl: (
+      //     <RefreshControl
+      //       refreshing={loading}
+      //       onRefresh={() => {
+      //         if (onRefresh) onRefresh();
+      //       }}
+      //     />
+      //   ),
+      // }}
     />
   );
 };
 
 export default withStyles(NewTransactionsListComponent, theme => ({
   rowContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between"
   },
   titleContainer: {
-    display: 'flex',
-    flexDirection: 'row',
+    display: "flex",
+    flexDirection: "row"
   },
   rowDetailContainer: {},
   accessoryContainer: {
-    padding: 8,
+    padding: 8
   },
   quantity: {
-    color: theme['text-disabled-color'],
-    marginRight: 4,
+    color: theme["text-disabled-color"],
+    marginRight: 4
   },
   subtitle: {
-    color: theme['text-hint-color'],
+    color: theme["text-hint-color"]
   },
   title: {
-    color: theme['text-basic-color'],
+    color: theme["text-basic-color"]
   },
   price: {
-    color: theme['color-primary-default'],
-  },
+    color: theme["color-primary-default"]
+  }
 }));

@@ -1,7 +1,7 @@
-import React from 'react';
-import { Layout, Text, withStyles } from 'react-native-ui-kitten';
+import React from "react";
+import { Layout, Text, withStyles } from "react-native-ui-kitten";
 
-import { MachineMenu } from '@src/containers/components';
+import { MachineMenu } from "@src/containers/components";
 
 const MenuComponent = ({ themedStyle, route, navigation }: any) => {
   return (
@@ -22,18 +22,18 @@ const MenuComponent = ({ themedStyle, route, navigation }: any) => {
 export default withStyles(MenuComponent, theme => ({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   illustrationContainer: {
     marginBottom: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   title: {},
   buttonSpace: {
-    marginTop: 16,
+    marginTop: 16
   },
   buttonOutline: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: "transparent"
+  }
 }));

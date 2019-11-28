@@ -1,18 +1,18 @@
-import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import React from "react";
+import { View, StyleSheet, Dimensions } from "react-native";
 
 import {
   PinchGestureHandler,
   State,
   PinchGestureHandlerGestureEvent,
-  PinchGestureHandlerStateChangeEvent,
-} from 'react-native-gesture-handler';
+  PinchGestureHandlerStateChangeEvent
+} from "react-native-gesture-handler";
 
 const styles = StyleSheet.create({
   preview: {
-    height: Dimensions.get('window').height,
-    width: '100%',
-  },
+    height: Dimensions.get("window").height,
+    width: "100%"
+  }
 });
 
 type Props = {
@@ -41,7 +41,8 @@ export default class ZoomView extends React.Component<any> {
     return (
       <PinchGestureHandler
         onGestureEvent={this.onGesturePinch}
-        onHandlerStateChange={this.onPinchHandlerStateChange}>
+        onHandlerStateChange={this.onPinchHandlerStateChange}
+      >
         <View style={[this.props.style, styles.preview]}>
           {this.props.children}
         </View>

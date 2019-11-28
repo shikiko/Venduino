@@ -1,7 +1,7 @@
-import React from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import React from "react";
+import { createStackNavigator } from "@react-navigation/stack";
 
-import { Dashboard as DashboardScreen } from '@src/containers/layouts';
+import { Dashboard as DashboardScreen } from "@src/containers/layouts";
 
 const Stack = createStackNavigator();
 

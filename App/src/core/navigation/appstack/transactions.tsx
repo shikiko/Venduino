@@ -1,13 +1,13 @@
-import React from 'react';
-import { withStyles, ThemedComponentProps } from 'react-native-ui-kitten';
+import React from "react";
+import { withStyles, ThemedComponentProps } from "react-native-ui-kitten";
 
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator } from "@react-navigation/stack";
 
 import {
   Transactions as TransactionsScreen,
-  TransactionsDetail as TransactionsDetailScreen,
-} from '@src/containers/layouts';
-import { AppLogo } from '@src/assets/icons';
+  TransactionsDetail as TransactionsDetailScreen
+} from "@src/containers/layouts";
+import { AppLogo } from "@src/assets/icons";
 
 const Stack = createStackNavigator();
 type Props = ThemedComponentProps & {};
@@ -18,12 +18,13 @@ const TransactionsStackScreenUnstyled = ({ themedStyle }: Props) => (
     initialRouteName="Home"
     screenOptions={{
       headerBackTitleStyle: {
-        color: themedStyle.color.text,
+        color: themedStyle.color.text
       },
       headerTintColor: themedStyle.color.text, // back button
       headerTitle: () => <Title />,
-      headerBackTitleVisible: false,
-    }}>
+      headerBackTitleVisible: false
+    }}
+  >
     <Stack.Screen
       name="Home"
       component={TransactionsScreen}
@@ -38,9 +39,9 @@ const TransactionsStackScreenUnstyled = ({ themedStyle }: Props) => (
 
 export default withStyles(TransactionsStackScreenUnstyled, theme => ({
   color: {
-    primary: theme['color-primary-default'],
-    text: theme['text-basic-color'],
-    hint: theme['text-hint-color'],
-    background: theme['background-basic-color-2'],
-  },
+    primary: theme["color-primary-default"],
+    text: theme["text-basic-color"],
+    hint: theme["text-hint-color"],
+    background: theme["background-basic-color-2"]
+  }
 }));

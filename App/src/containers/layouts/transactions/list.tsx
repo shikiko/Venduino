@@ -1,7 +1,7 @@
-import React from 'react';
-import { Layout, Text, withStyles } from 'react-native-ui-kitten';
+import React from "react";
+import { Layout, Text, withStyles } from "react-native-ui-kitten";
 
-import { TransactionsList } from '@src/containers/components';
+import { TransactionsList } from "@src/containers/components";
 
 const TransactionsComponent = ({ themedStyle, navigation }: any) => {
   return (
@@ -22,20 +22,20 @@ const TransactionsComponent = ({ themedStyle, navigation }: any) => {
 export const Transactions = withStyles(TransactionsComponent, () => ({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 16
   },
   illustrationContainer: {
     marginBottom: 48,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   helloLabel: {
-    marginBottom: 32,
+    marginBottom: 32
   },
   buttonSpace: {
-    marginTop: 16,
+    marginTop: 16
   },
   buttonOutline: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: "transparent"
+  }
 }));

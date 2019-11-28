@@ -1,13 +1,13 @@
-import React from 'react';
+import React from "react";
 import {
   Layout,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
-import { useSafeArea } from 'react-native-safe-area-context';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
+import { useSafeArea } from "react-native-safe-area-context";
 
-import { BarcodeScanner } from '@src/components/common';
+import { BarcodeScanner } from "@src/components/common";
 
 export type Props = ThemedComponentProps & any;
 
@@ -19,10 +19,10 @@ const ScannerComponent = ({ themedStyle, navigation }: Props) => {
         onBarcode={(barcode: any) => {
           // console.log(barcode);
           // data machineId validation
-          if (barcode.data !== ' ') {
-            navigation.navigate('MachineMenu', {
+          if (barcode.data !== " ") {
+            navigation.navigate("MachineMenu", {
               barcode,
-              machineId: barcode.data,
+              machineId: barcode.data
             });
           }
         }}
@@ -43,9 +43,9 @@ export default withStyles(ScannerComponent, theme => ({
   container: {
     flex: 0.5,
     padding: 16,
-    justifyContent: 'center',
+    justifyContent: "center"
   },
   text: {
-    textAlign: 'center',
-  },
+    textAlign: "center"
+  }
 }));

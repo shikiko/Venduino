@@ -1,23 +1,23 @@
-import React from 'react';
-import useSWR from 'swr';
+import React from "react";
+import useSWR from "swr";
 import {
   Layout,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
 
-import { TransactionsList as TransactionsListBase } from '@src/components/app';
-import { UserService } from '@src/core/services';
+import { TransactionsList as TransactionsListBase } from "@src/components/app";
+import { UserService } from "@src/core/services";
 
 export type RecentTransactionsProps = ThemedComponentProps;
 
 export const fetchTransactions = async () => {
-  const res = await UserService.fetchPurchases({ limit: 5 });
+  const res = await UserService.fetchPurchases();
   return res.purchases.map((purchase: any) => ({
     ...purchase,
     title: `${purchase.quantity}x ${purchase.item_name}`,
-    description: purchase.name,
+    description: purchase.name
   }));
 };
 
@@ -25,9 +25,11 @@ const RecentTransactions = ({
   themedStyle,
   ...props
 }: RecentTransactionsProps) => {
-  const { data: purchases } = useSWR('/api/user/purchases', fetchTransactions, {
-    refreshInterval: 3000,
+  const { data } = useSWR("/api/user/purchases/recent", fetchTransactions, {
+    refreshInterval: 2000
   });
+
+  const purchases = data ? data.slice(0, 3) : [];
 
   return (
     <>
@@ -43,10 +45,10 @@ const RecentTransactions = ({
 
 export default withStyles(RecentTransactions, theme => ({
   listContainer: {
-    flex: 1,
+    flex: 1
     // height: 58 * 3,
   },
   label: {
-    marginVertical: 16,
-  },
+    marginVertical: 16
+  }
 }));

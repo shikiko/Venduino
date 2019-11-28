@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 import {
   View,
@@ -9,11 +9,11 @@ import {
   TouchableNativeFeedback,
   GestureResponderEvent,
   StyleProp,
-  ViewStyle,
-} from 'react-native';
+  ViewStyle
+} from "react-native";
 
 export type TouchableProps = {
-  feedback?: 'raised' | 'opacity' | 'highlight';
+  feedback?: "raised" | "opacity" | "highlight";
   onPress?: (event: GestureResponderEvent) => void | undefined;
   children: React.ReactChildren | React.ReactElement;
   style?: StyleProp<ViewStyle>;
@@ -33,7 +33,7 @@ const Touchable = ({
       </TouchableWithoutFeedback>
     );
   }
-  if (feedback === 'highlight') {
+  if (feedback === "highlight") {
     return (
       <TouchableHighlight underlayColor="white" onPress={onPress} {...props}>
         <View>{children}</View>
@@ -42,26 +42,28 @@ const Touchable = ({
   }
 
   // All Android Buttons should have the ripple effect
-  if (Platform.OS === 'android') {
+  if (Platform.OS === "android") {
     // Raised Android buttons need a white ripple
-    if (feedback === 'raised') {
+    if (feedback === "raised") {
       return (
         <TouchableNativeFeedback
           onPress={onPress}
-          background={TouchableNativeFeedback.Ripple('#FFF')}
-          {...props}>
+          background={TouchableNativeFeedback.Ripple("#FFF")}
+          {...props}
+        >
           <View>{children}</View>
         </TouchableNativeFeedback>
       );
     }
 
     // Normal Android buttons get a gray ripple
-    if (feedback === 'opacity') {
+    if (feedback === "opacity") {
       return (
         <TouchableNativeFeedback
           onPress={onPress}
-          background={TouchableNativeFeedback.Ripple('rgba(0,0,0,0.1)')}
-          {...props}>
+          background={TouchableNativeFeedback.Ripple("rgba(0,0,0,0.1)")}
+          {...props}
+        >
           <View>{children}</View>
         </TouchableNativeFeedback>
       );

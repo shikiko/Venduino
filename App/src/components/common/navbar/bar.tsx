@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState } from "react";
+import { StyleSheet, View } from "react-native";
 import {
   Layout,
   Text,
@@ -9,11 +9,11 @@ import {
   TopNavigationAction,
   TopNavigationActionProps,
   styled,
-  StyleType,
-} from 'react-native-ui-kitten';
+  StyleType
+} from "react-native-ui-kitten";
 
-import { StringValidator } from '@src/core/validators';
-import BackButton from './backbutton';
+import { StringValidator } from "@src/core/validators";
+import BackButton from "./backbutton";
 
 export type NavbarControlProps = React.ReactElement | React.ReactElement[];
 export type NavbarMenuDataProps = { [key: string]: string }[];
@@ -30,29 +30,29 @@ export type NavbarProps = TopNavigationProps & {
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: 16,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: 16
   },
   titleContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   title: {},
   subtitle: {},
   leftContainer: {
     width: 64,
-    justifyContent: 'flex-start',
-    flexDirection: 'row',
+    justifyContent: "flex-start",
+    flexDirection: "row"
   },
   rightContainer: {
     width: 64,
-    justifyContent: 'flex-end',
-    flexDirection: 'row',
+    justifyContent: "flex-end",
+    flexDirection: "row"
   },
-  backButtonContainer: { flexDirection: 'row', alignItems: 'center' },
-  backButtonText: { marginLeft: 8, fontSize: 16 },
+  backButtonContainer: { flexDirection: "row", alignItems: "center" },
+  backButtonText: { marginLeft: 8, fontSize: 16 }
 });
 
 const NavbarComponent = ({
@@ -78,7 +78,7 @@ const NavbarComponent = ({
   const renderElements = (source: React.ReactElement[]) => {
     return React.Children.map(source, (element, index) => {
       return React.cloneElement(element, {
-        key: `navbar-element-${element.type}`,
+        key: `navbar-element-${element.type}`
       });
     });
   };

@@ -1,21 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dimensions,
   ViewProps,
   View,
   RefreshControl,
   Image,
-  FlatList,
-} from 'react-native';
+  FlatList
+} from "react-native";
 import {
   Layout,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
-import Modal from 'react-native-modal';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
+import Modal from "react-native-modal";
 
-import { Touchable, Button } from '@src/components/common';
+import { Touchable, Button } from "@src/components/common";
 
 interface ComponentProps {
   onOrder: (item: any) => void;
@@ -54,7 +54,8 @@ const MenuComponent = ({
           onPress={async () => {
             if (onOrder) await onOrder(selectedItem);
             setModalVisible(false);
-          }}>
+          }}
+        >
           {`Buy $${selectedItem.price}`}
         </Button>
       </Layout>
@@ -64,13 +65,21 @@ const MenuComponent = ({
     setItem(item);
     setModalVisible(true);
   };
-
+  if (!data || data.length === 0)
+    return (
+      <Layout style={themedStyle.emptyContainer}>
+        <Text category="h3" appearance="hint">
+          No items available
+        </Text>
+      </Layout>
+    );
   return (
     <Layout style={themedStyle.container}>
       <Modal
         isVisible={modalVisible}
         backdropColor="#111"
-        onBackdropPress={() => setModalVisible(false)}>
+        onBackdropPress={() => setModalVisible(false)}
+      >
         {renderModalElement()}
       </Modal>
       <FlatList
@@ -109,50 +118,54 @@ const MenuComponent = ({
 
 export default withStyles(MenuComponent, theme => ({
   container: {},
+  emptyContainer: {
+    padding: 12,
+    alignItems: "center"
+  },
   modalContainer: {
     borderRadius: 12,
-    padding: 12,
+    padding: 12
   },
   imageContainer: {
-    alignItems: 'center',
+    alignItems: "center"
   },
   listContainer: {
     // flex: 1,
     paddingVertical: 12,
-    alignItems: 'center',
+    alignItems: "center"
   },
   itemContainer: {
     flex: 1,
-    flexDirection: 'column',
+    flexDirection: "column",
     marginVertical: 8,
     marginHorizontal: 12,
     padding: 12,
     borderRadius: 4,
-    backgroundColor: theme['background-basic-color-2'],
+    backgroundColor: theme["background-basic-color-2"]
   },
   disabledItem: {
-    opacity: 0.5,
+    opacity: 0.5
   },
   imageThumbnail: {
     borderRadius: 4,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     height: 150,
     width: 150,
-    marginBottom: 8,
+    marginBottom: 8
   },
   quantity: {
-    color: theme['text-disabled-color'],
-    marginRight: 4,
+    color: theme["text-disabled-color"],
+    marginRight: 4
   },
   subtitle: {
-    color: theme['text-hint-color'],
+    color: theme["text-hint-color"]
   },
   title: {
-    color: theme['text-basic-color'],
+    color: theme["text-basic-color"]
   },
   price: {
-    color: theme['color-primary-default'],
-    fontSize: 18,
-  },
+    color: theme["color-primary-default"],
+    fontSize: 18
+  }
 }));

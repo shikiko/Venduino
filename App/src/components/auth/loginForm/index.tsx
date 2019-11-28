@@ -1,11 +1,11 @@
-import React from 'react';
-import { View, ViewProps } from 'react-native';
-import { ThemedComponentProps, ThemeType, withStyles } from '@kitten/theme';
-import { Button } from '@kitten/ui';
-import { textStyle, ValidationInput } from '@src/components/common';
-import { EyeOffIconFill, PersonIconFill } from '@src/assets/icons';
-import { NameValidator, PasswordValidator } from '@src/core/validators';
-import { SignInForm2Data } from './type';
+import React from "react";
+import { View, ViewProps } from "react-native";
+import { ThemedComponentProps, ThemeType, withStyles } from "@kitten/theme";
+import { Button } from "@kitten/ui";
+import { textStyle, ValidationInput } from "@src/components/common";
+import { EyeOffIconFill, PersonIconFill } from "@src/assets/icons";
+import { NameValidator, PasswordValidator } from "@src/core/validators";
+import { SignInForm2Data } from "./type";
 
 interface ComponentProps {
   onForgotPasswordPress: () => void;
@@ -28,7 +28,7 @@ interface State {
 class SignInForm2Component extends React.Component<SignInForm2Props, State> {
   public state: State = {
     username: undefined,
-    password: undefined,
+    password: undefined
   };
 
   public componentDidUpdate(prevProps: SignInForm2Props, prevState: State) {
@@ -96,7 +96,8 @@ class SignInForm2Component extends React.Component<SignInForm2Props, State> {
               textStyle={themedStyle.forgotPasswordText}
               appearance="ghost"
               activeOpacity={0.75}
-              onPress={this.onForgotPasswordButtonPress}>
+              onPress={this.onForgotPasswordButtonPress}
+            >
               Forgot your password?
             </Button>
           </View>
@@ -111,19 +112,19 @@ export const LoginForm = withStyles(
   (theme: ThemeType) => ({
     container: {},
     forgotPasswordContainer: {
-      flexDirection: 'row',
-      justifyContent: 'flex-end',
+      flexDirection: "row",
+      justifyContent: "flex-end"
     },
     passwordInput: {
-      marginTop: 16,
+      marginTop: 16
     },
     forgotPasswordButton: {
-      paddingHorizontal: 0,
+      paddingHorizontal: 0
     },
     forgotPasswordText: {
       fontSize: 15,
-      color: theme['text-hint-color'],
-      ...textStyle.subtitle,
-    },
-  }),
+      color: theme["text-hint-color"],
+      ...textStyle.subtitle
+    }
+  })
 );

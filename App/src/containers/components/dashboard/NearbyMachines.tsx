@@ -1,17 +1,17 @@
-import React from 'react';
-import useSWR from 'swr';
+import React from "react";
+import useSWR from "swr";
 import {
   Layout,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
 
 import {
   NearbyMachines as NearbyMachinesBase,
-  MachinePointProps,
-} from '@src/components/app';
-import { MachineService } from '@src/core/services';
+  MachinePointProps
+} from "@src/components/app";
+import { MachineService } from "@src/core/services";
 
 export const fetchMachines = async () => {
   const res = await MachineService.fetchAll();
@@ -22,15 +22,15 @@ export const fetchMachines = async () => {
     description: machine.address,
     location: {
       latitude: parseFloat(machine.latitude),
-      longitude: parseFloat(machine.longitude),
-    },
+      longitude: parseFloat(machine.longitude)
+    }
   }));
 };
 
 export type NearbyMachinesProps = ThemedComponentProps;
 
 const NearbyMachines = ({ themedStyle, ...props }: NearbyMachinesProps) => {
-  const { data: machines } = useSWR('/api/machine', fetchMachines);
+  const { data: machines } = useSWR("/api/machine", fetchMachines);
 
   return (
     <>
@@ -46,9 +46,9 @@ const NearbyMachines = ({ themedStyle, ...props }: NearbyMachinesProps) => {
 
 export default withStyles(NearbyMachines, theme => ({
   mapContainer: {
-    height: 128,
+    height: 128
   },
   label: {
-    marginVertical: 16,
-  },
+    marginVertical: 16
+  }
 }));

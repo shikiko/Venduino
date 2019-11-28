@@ -1,11 +1,11 @@
-import React from 'react';
-import useSWR from 'swr';
+import React from "react";
+import useSWR from "swr";
 
 import {
   BalanceCard as BalanceCardBase,
-  BalanceCardProps as BalanceCardBaseProps,
-} from '@src/components/app';
-import { UserService } from '@src/core/services';
+  BalanceCardProps as BalanceCardBaseProps
+} from "@src/components/app";
+import { UserService } from "@src/core/services";
 
 export type BalanceCardProps = BalanceCardBaseProps & {
   onTopup: () => void;
@@ -17,8 +17,8 @@ export const fetchProfile = async () => {
 };
 
 const BalanceCard = ({ onTopup, ...props }: BalanceCardProps) => {
-  const { data: user } = useSWR('/api/user/profile', fetchProfile, {
-    refreshInterval: 3000,
+  const { data: user } = useSWR("/api/user/profile", fetchProfile, {
+    refreshInterval: 3000
   });
   return (
     <BalanceCardBase

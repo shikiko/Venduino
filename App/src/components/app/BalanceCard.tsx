@@ -1,12 +1,12 @@
-import React from 'react';
+import React from "react";
 import {
   Layout,
   Text,
   withStyles,
-  ThemedComponentProps,
-} from 'react-native-ui-kitten';
+  ThemedComponentProps
+} from "react-native-ui-kitten";
 
-import { Button } from '@src/components/common';
+import { Button } from "@src/components/common";
 
 export type BalanceCardProps = ThemedComponentProps & {
   title?: string;
@@ -16,11 +16,11 @@ export type BalanceCardProps = ThemedComponentProps & {
 };
 
 const BalanceCard = ({
-  title = 'Balance',
-  balance = '0',
-  action = 'TOP UP',
+  title = "Balance",
+  balance = "0",
+  action = "TOP UP",
   onAction = () => {},
-  themedStyle,
+  themedStyle
 }: BalanceCardProps) => {
   return (
     <Layout style={themedStyle.container}>
@@ -37,7 +37,8 @@ const BalanceCard = ({
         style={themedStyle.buttonOutline}
         size="small"
         appearance="outline"
-        onPress={onAction}>
+        onPress={onAction}
+      >
         {action}
       </Button>
     </Layout>
@@ -46,21 +47,21 @@ const BalanceCard = ({
 
 export default withStyles(BalanceCard, theme => ({
   container: {
-    justifyContent: 'space-between',
-    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexDirection: "row",
     marginBottom: 16,
     padding: 16,
     borderRadius: 4,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05,
-    shadowRadius: 5,
+    shadowRadius: 5
   },
   balanceText: {
     lineHeight: 18,
-    fontSize: 18,
+    fontSize: 18
   },
   buttonOutline: {
-    backgroundColor: 'transparent',
-  },
+    backgroundColor: "transparent"
+  }
 }));
